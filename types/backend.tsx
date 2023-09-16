@@ -14,11 +14,12 @@ export type AssignedChore = {
 };
 
 export type Account = {
-    accountId: string;
+    householdId: string;
+    id: string
     firstName: string;
     lastName: string;
     email: string;
-    photo: string;
+    pictureUrl: string;
 };
 
 export type Chore = {
