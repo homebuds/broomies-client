@@ -1,201 +1,89 @@
-import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, Text, View, StyleSheet} from 'react-native';
-
-type AssignedChore = {
-  id: string;
-  choreId: string;
-  accountId: string;
-  date: Date;
-  isCompleted: boolean;
-  choreDescription?: string;
-  choreName?: string;
-  firstName?: string;
-  lastName?: string;
-};
-
-type Account = {
-  accountId: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-};
-
-type Chore = {
-  id: string;
-  choreDescription: string;
-  choreName: string;
-};
-
-const chores: Chore[] = [
-  {
-    id: "c1",
-    choreDescription: "Take out the trash",
-    choreName: "Trash Duty",
-  },
-  {
-    id: "c2",
-    choreDescription: "Wash the dishes",
-    choreName: "Dishwashing",
-  },
-  {
-    id: "c3",
-    choreDescription: "Vacuum the living room",
-    choreName: "Vacuum",
-  },
-  {
-    id: "c4",
-    choreDescription: "Clean the bathroom",
-    choreName: "Bathroom Cleanup",
-  },
-];
-
-const assignedChores: AssignedChore[] = [
-  {
-    id: "1",
-    choreId: "c1",
-    accountId: "a1",
-    date: new Date("2023-09-16"),
-    isCompleted: false,
-  },
-  {
-    id: "2",
-    choreId: "c2",
-    accountId: "a1",
-    date: new Date("2023-09-17"),
-    isCompleted: true,
-  },
-  {
-    id: "3",
-    choreId: "c3",
-    accountId: "a2",
-    date: new Date("2023-09-16"),
-    isCompleted: false,
-  },
-  {
-    id: "4",
-    choreId: "c4",
-    accountId: "a2",
-    date: new Date("2023-09-18"),
-    isCompleted: false,
-  },
-  {
-    id: "5",
-    choreId: "c1",
-    accountId: "a3",
-    date: new Date("2023-09-19"),
-    isCompleted: false,
-  },
-  {
-    id: "6",
-    choreId: "c3",
-    accountId: "a4",
-    date: new Date("2023-09-16"),
-    isCompleted: true,
-  },
-  {
-    id: "7",
-    choreId: "c2",
-    accountId: "a3",
-    date: new Date("2023-09-20"),
-    isCompleted: false,
-  },
-  {
-    id: "8",
-    choreId: "c3",
-    accountId: "a4",
-    date: new Date("2023-09-16"),
-    isCompleted: true,
-  },
-  {
-    id: "9",
-    choreId: "c2",
-    accountId: "a3",
-    date: new Date("2023-09-20"),
-    isCompleted: false,
-  },
-  {
-    id: "10",
-    choreId: "c3",
-    accountId: "a4",
-    date: new Date("2023-09-16"),
-    isCompleted: true,
-  },
-  {
-    id: "11",
-    choreId: "c2",
-    accountId: "a3",
-    date: new Date("2023-09-20"),
-    isCompleted: false,
-  },
-];
-
-const accounts: Account[] = [
-  {
-    accountId: "a1",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-  },
-  {
-    accountId: "a2",
-    firstName: "Jane",
-    lastName: "Doe",
-    email: "jane.doe@example.com",
-  },
-  {
-    accountId: "a3",
-    firstName: "Emily",
-    lastName: "Smith",
-    email: "emily.smith@example.com",
-  },
-  {
-    accountId: "a4",
-    firstName: "Tom",
-    lastName: "Brown",
-    email: "tom.brown@example.com",
-  },
-];
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, Text, View, StyleSheet, Image } from 'react-native';
+import { assignedChores, accounts, chores } from '../testdata';
+import { AssignedChore, CompletionStatus } from '../types/backend';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 12,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#ECF0EB',
   },
   listItem: {
     padding: 16,
-    backgroundColor: '#ffffff',
+    paddingLeft: 20,
+    paddingRight: 20,
     marginBottom: 8,
     borderRadius: 20,
-    height: 115,
-    width: "100%"
+    height: 120,
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: 'wrap',
+    flex: 1,
   },
-  listItemShadow: {   shadowColor: '#212121',
-  shadowOffset: {
-    width: 0,
-    height: 0,
+  listItemShadow: {
+    shadowColor: '#212121',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 11,
   },
-  shadowOpacity: 0.2,
-  shadowRadius: 11,},
+  listItemTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    marginBottom: 8
+  },
+  listItemDescription: {
+    fontSize: 12,
+    fontWeight: "400",
+    flex: 1
+  },
+  listItemImage: {
+    width: 68,
+    height: 68,
+    borderRadius: 50
+  },
+  listItemAvatar: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    rowGap: 5,
+  },
   listSubOptions: {
     display: 'flex',
     flexDirection: 'row',
     alignContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
+    columnGap: 5,
+    width: '100%'
   },
   redCircle: {
     width: 10,
     height: 10,
     borderRadius: 25,
-    backgroundColor: 'red',
+    backgroundColor: '#FA9A9A',
   },
   greenCircle: {
     width: 10,
     height: 10,
     borderRadius: 25,
-    backgroundColor: 'green',
+    backgroundColor: '#B9EAB3',
+  },
+  yellowCircle: {
+    width: 10,
+    height: 10,
+    borderRadius: 25,
+    backgroundColor: '#EDEA9B',
+  },
+  listItemComplete: {
+    backgroundColor: '#F4FFE5'
+  },
+  listItemInProgress: {
+    backgroundColor: '#FFFDEA'
   },
   flatListContainer: {
     maxHeight: '100%',
@@ -204,10 +92,10 @@ const styles = StyleSheet.create({
 });
 
 interface IChores {
-    user?: string;
+  user?: string;
 }
 
-const Chores = ({user} : IChores) => {
+const Chores = ({ user }: IChores) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<AssignedChore[]>([]);
 
@@ -216,13 +104,14 @@ const Chores = ({user} : IChores) => {
       let tempChores = assignedChores.map(aChore => {
         const chore = chores.find(chore => aChore.choreId === chore.id)
         const account = accounts.find(account => account.accountId === aChore.accountId);
-          return {
-            ...aChore,
-            choreDescription: chore?.choreDescription,
-            choreName: chore?.choreName,
-            firstName: account?.firstName,
-            lastName: account?.lastName
-          }
+        return {
+          ...aChore,
+          choreDescription: chore?.choreDescription,
+          choreName: chore?.choreName,
+          firstName: account?.firstName,
+          lastName: account?.lastName,
+          photo: account?.photo
+        }
       });
       if (user) {
         tempChores = tempChores.filter(chore => chore.accountId === user)
@@ -245,20 +134,23 @@ const Chores = ({user} : IChores) => {
         <ActivityIndicator />
       ) : (
         <FlatList
-        style={styles.flatListContainer}
+          style={styles.flatListContainer}
           data={data}
-          keyExtractor={({id}) => id}
-          ItemSeparatorComponent={() => <View style={{height: 25}} />}
-          renderItem={({item}) => (
-            <View style={[styles.listItem, styles.listItemShadow]}>
-              <Text>{item.choreName}</Text>
-              <View style={styles.listSubOptions}>
-                <Text>{item.firstName} {item.lastName}</Text>
-                {item.isCompleted ? (
-        <View style={styles.greenCircle}></View>
-      ) : (
-        <View style={styles.redCircle}></View>
-      )}
+          keyExtractor={({ id }) => id}
+          ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
+          renderItem={({ item }) => (
+            <View style={[styles.listItemShadow, item.isCompleted === CompletionStatus.COMPLETED ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.listItemTitle}>{item.choreName}</Text>
+                <Text style={styles.listItemDescription}>{item.choreDescription}</Text>
+                <View style={styles.listSubOptions}>
+                  <Text>{`${item.isCompleted === CompletionStatus.COMPLETED ? "Done" : "In Progress"}`}</Text>
+                  <View style={item.isCompleted === CompletionStatus.COMPLETED ? styles.greenCircle : styles.yellowCircle}></View>
+                </View>
+              </View>
+              <View style={styles.listItemAvatar}>
+                <Image style={styles.listItemImage} source={{ uri: item?.photo as string }} />
+                <Text style={styles.listItemDescription}>{item?.firstName}</Text>
               </View>
             </View>
           )}
