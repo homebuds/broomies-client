@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingBottom: 20,
         display: "flex",
-        height: 350,
+        height: 325,
         borderTopLeftRadius: 20,
         borderTopEndRadius: 20,
         backgroundColor: '#ffffff',

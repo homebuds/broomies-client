@@ -1,4 +1,4 @@
-import { Chore, AssignedChore, Account, CompletionStatus } from './types/backend';
+import { Chore, AssignedChore, Account, CompletionStatus, tempElo } from './types/backend';
 
 export const chores: Chore[] = [
     {
@@ -133,3 +133,22 @@ export const accounts: Account[] = [
         photo: "https://marketplace.canva.com/EAFewoMXU-4/1/0/1600w/canva-purple-pink-gradient-man-3d-avatar-0o0qE2T_kr8.jpg"
     },
 ];
+
+export const elo: tempElo[] = [
+    {
+        id: "a1",
+        elo: 170
+    },
+    {
+        id: "a2",
+        elo: 980
+    },
+    {
+        id: "a3",
+        elo: 650
+    },
+    {
+        id: "a4",
+        elo: 900
+    },
+]
