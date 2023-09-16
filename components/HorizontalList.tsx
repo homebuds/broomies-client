@@ -11,6 +11,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopEndRadius: 20,
     backgroundColor: '#ffffff',
+    boxShadow: "1px 4px 15px 2px rgba(0,0,0,0.66)",
+    width: "100%",
   },
   listItem: {
     padding: 16,
