@@ -3,43 +3,47 @@ import { ActivityIndicator, FlatList, Text, View, StyleSheet } from 'react-nativ
 import { AssignedChore } from '../types/backend';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HorizontalList from '../components/HorizontalList';
+import LeaderboardBarChart from '../components/Leaderboard';
+import VerticalBarChart from '../components/Leaderboard';
 import axios from 'axios';
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    listItem: {
-        padding: 16,
-        backgroundColor: '#f9f9f9',
-        marginBottom: 8,
-        borderRadius: 8,
-        height: "100%",
-        width: 180
-    },
-    listSubOptions: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignContent: 'center',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-    },
-    redCircle: {
-        width: 10,
-        height: 10,
-        borderRadius: 25,
-        backgroundColor: 'red',
-    },
-    greenCircle: {
-        width: 10,
-        height: 10,
-        borderRadius: 25,
-        backgroundColor: 'green',
-    },
-    flatListContainer: {
-        maxHeight: "30%"
-    }
+  container: {
+    flex: 1,
+    marginTop: "auto",
+    height: '100%'
+  },
+  listItem: {
+    padding: 16,
+    backgroundColor: '#f9f9f9',
+    marginBottom: 8,
+    borderRadius: 8,
+    height: "100%",
+    width: 180
+  },
+  listSubOptions: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  redCircle: {
+    width: 10,
+    height: 10,
+    borderRadius: 25,
+    backgroundColor: 'red',
+  },
+  greenCircle: {
+    width: 10,
+    height: 10,
+    borderRadius: 25,
+    backgroundColor: 'green',
+  },
+  flatListContainer: {
+    maxHeight: "30%"
+  }
 });
 
 interface IHome {
@@ -92,24 +96,35 @@ const Home = ({ user }: IHome) => {
         getHousehold();
     }, []);
 
-    useEffect(() => {
-        if (household) {
-            getChores();
-        }
-    }, [household]);
+  const dat = [
+    { label: 'Category 1', value: 30 },
+    { label: 'Category 2', value: 50 },
+    { label: 'Category 3', value: 20 },
+  ];
+  
+  // Render the vertical bar chart
+  useEffect(() => {
+      if (household) {
+          getChores();
+      }
+  }, [household]);
+  
 
-    return (
-        <View style={styles.container}>
-            {isLoading ? (
-                <ActivityIndicator />
-            ) : (
-                <>
-                    <View style={{ flex: 1 }}></View>
-                    <HorizontalList items={data} />
-                </>
-            )}
+  return (
+    <View style={styles.container}>
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+        <View style={{flex: 1}}></View>
+        <View>
+          <VerticalBarChart data={dat} />
         </View>
-    );
+        <HorizontalList items={data} />
+        </>
+      )}
+    </View>
+  );
 };
 
 export default Home;

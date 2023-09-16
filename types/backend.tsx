@@ -32,3 +32,7 @@ export type User = {
     householdId: string;
 }
 
+export type tempElo = {
+    id: string,
+    elo: number
+}
