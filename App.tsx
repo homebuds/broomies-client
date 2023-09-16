@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator } from 'react-native-paper';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -22,6 +22,14 @@ const Stack = createNativeStackNavigator();
 
 const Tab = createBottomTabNavigator();
 const ChoresStack = createNativeStackNavigator();
+
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background:'#ffffff'
+  },
+};
 
 
 const App = () => {
@@ -80,9 +88,9 @@ const App = () => {
     (
       <ActivityIndicator />
     ) :
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       {user ? 
-      <Tab.Navigator screenOptions={{ headerShown: true }} >
+      <Tab.Navigator screenOptions={{ headerShown: true}}>
       <Tab.Screen name="Home" component={Home} options={{ title: `Hello ${user}!` }}/>
       <Tab.Screen name="Chores" children={(props) => <CustomChoresTab {...props} user={user}/>} />
       <Tab.Screen name="Bills" component={Bills} />

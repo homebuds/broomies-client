@@ -1,30 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, Text, View, StyleSheet} from 'react-native';
-
-type AssignedChore = {
-  id: string;
-  choreId: string;
-  accountId: string;
-  date: Date;
-  isCompleted: boolean;
-  choreDescription?: string;
-  choreName?: string;
-  firstName?: string;
-  lastName?: string;
-};
-
-type Account = {
-  accountId: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-};
-
-type Chore = {
-  id: string;
-  choreDescription: string;
-  choreName: string;
-};
+import { Chore, AssignedChore, Account } from '../types/backend';
+import HorizontalList from '../components/HorizontalList';
 
 const chores: Chore[] = [
   {
@@ -159,14 +136,15 @@ const accounts: Account[] = [
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    padding: 4,
   },
   listItem: {
     padding: 16,
     backgroundColor: '#f9f9f9',
     marginBottom: 8,
     borderRadius: 8,
-    width: "100%"
+    height: "100%",
+    width: 180
   },
   listSubOptions: {
     display: 'flex',
@@ -189,7 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
   },
   flatListContainer: {
-    maxHeight: '100%',
+    maxHeight: "30%"
   }
 });
 
@@ -234,24 +212,10 @@ const Home = ({user} : IHome) => {
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <FlatList
-        style={styles.flatListContainer}
-          data={data}
-          keyExtractor={({id}) => id}
-          renderItem={({item}) => (
-            <View style={styles.listItem}>
-              <Text>{item.choreName}</Text>
-              <View style={styles.listSubOptions}>
-                <Text>{item.firstName} {item.lastName}</Text>
-                {item.isCompleted ? (
-        <View style={styles.greenCircle}></View>
-      ) : (
-        <View style={styles.redCircle}></View>
-      )}
-              </View>
-            </View>
-          )}
-        />
+        <>
+        <View style={{flex: 1}}></View>
+        <HorizontalList items={data} />
+        </>
       )}
     </View>
   );

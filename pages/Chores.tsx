@@ -159,15 +159,24 @@ const accounts: Account[] = [
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    padding: 12,
+    backgroundColor: '#ffffff',
   },
   listItem: {
     padding: 16,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#ffffff',
     marginBottom: 8,
-    borderRadius: 8,
+    borderRadius: 20,
+    height: 115,
     width: "100%"
   },
+  listItemShadow: {   shadowColor: '#212121',
+  shadowOffset: {
+    width: 0,
+    height: 0,
+  },
+  shadowOpacity: 0.2,
+  shadowRadius: 11,},
   listSubOptions: {
     display: 'flex',
     flexDirection: 'row',
@@ -190,6 +199,7 @@ const styles = StyleSheet.create({
   },
   flatListContainer: {
     maxHeight: '100%',
+    padding: 15
   }
 });
 
@@ -238,8 +248,9 @@ const Chores = ({user} : IChores) => {
         style={styles.flatListContainer}
           data={data}
           keyExtractor={({id}) => id}
+          ItemSeparatorComponent={() => <View style={{height: 25}} />}
           renderItem={({item}) => (
-            <View style={styles.listItem}>
+            <View style={[styles.listItem, styles.listItemShadow]}>
               <Text>{item.choreName}</Text>
               <View style={styles.listSubOptions}>
                 <Text>{item.firstName} {item.lastName}</Text>
