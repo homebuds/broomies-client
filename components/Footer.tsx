@@ -3,15 +3,12 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import HomeIcon from '../icons/home.svg'
 import BroomIcon from '../icons/broom.svg'
 import MoneyIcon from '../icons/money.svg'
-
-interface ICustomerChoresTab {
-    user: string;
-}
+import SignOutIcon from '../icons/signout.svg'
 
 const Footer: React.FC<BottomTabBarProps> = (props) => {
     const { state, navigation } = props;
     return (
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', maxWidth: "100%", padding: 10, paddingLeft: 50, paddingRight: 50 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', maxWidth: "100%", padding: 10, paddingLeft: 30, paddingRight: 30 }}>
             {/* Render the default tab bar */}
             <View style={{ display: "flex", flexDirection: 'row', alignItems: 'center', flex: 1, width: "100%" }}>
                 {props.state.routes.map((route, index) => (
@@ -20,9 +17,9 @@ const Footer: React.FC<BottomTabBarProps> = (props) => {
                         onPress={() => props.navigation.navigate(route.name)}
                         style={{
                             margin: "auto", flexGrow: 1, borderBottomWidth: state.index === index ? 5 : 0, borderColor: "black", padding: 10,
-                            paddingLeft: 25,
-                            paddingRight: 25,
-                            display: "flex", alignItems: 'flex-end', alignContent: "center",
+                            // paddingLeft: 25,
+                            // paddingRight: 25,
+                            display: "flex", alignItems: 'center', alignContent: "center",
                         }}
                     >
                         {route.name === "Home" ?
@@ -30,7 +27,7 @@ const Footer: React.FC<BottomTabBarProps> = (props) => {
                             route.name === "Chores" ?
                                 <BroomIcon /> :
                                 route.name === "Bills" ?
-                                    <MoneyIcon /> : <></>}
+                                    <MoneyIcon /> : <SignOutIcon />}
                     </TouchableOpacity>
                 ))}
             </View>
