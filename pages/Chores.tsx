@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View, StyleSheet, Image } from 'react-native';
+import { ActivityIndicator, FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AssignedChore, CompletionStatus } from '../types/backend';
+import { Button } from 'react-native-paper';
 import axios from 'axios';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 12,
+    paddinrg: 12,
     backgroundColor: '#ECF0EB',
   },
   listItem: {
@@ -102,7 +103,6 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
   const [isLoading, setLoading] = useState(true);
   const [household, setHousehold] = useState('');
   const [data, setData] = useState<AssignedChore[]>([]);
-  console.log(household);
 
   const getChores = async () => {
     const fetchChores = async () => {
@@ -119,15 +119,24 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
             ...chore.account,
             dueDate: chore?.dueDate,
             id: chore.id,
+            accountId: chore.accountId,
+            completed: chore?.completed
           }
-        }));
+        }).sort((a, b) => Date.parse(a.dueDate) - Date.parse(b.dueDate)));
       } catch (e) {
         console.log(e)
       }
       setLoading(false);
     }
-    fetchChores()
+    fetchChores();
   };
+
+  const completeTask = async (id: string) => {
+    const res = await axios.patch(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/${id}/complete`);
+    if (res) {
+      setRefetch(true);
+    }
+  }
 
   useEffect(() => {
     const getHousehold = async () => {
@@ -135,8 +144,6 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
         const householdId = await AsyncStorage.getItem('household');
         if (householdId) {
           setHousehold(householdId)
-        } else {
-          console.log('nononon')
         }
       } catch (err) {
         console.log(err);
@@ -178,21 +185,28 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
           keyExtractor={({ id }) => id}
           ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
           renderItem={({ item }) => {
-            console.log(item)
-            return <View key={item.id} style={[styles.listItemShadow, item.isCompleted === CompletionStatus.COMPLETED ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
+            return <View key={item.id} style={[styles.listItemShadow, item.completed ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
               <View style={{ flex: 1 }}>
                 <Text style={styles.listItemDescription}>{getDate(item.dueDate)}</Text>
                 <Text style={styles.listItemTitle}>{item.name}</Text>
                 <Text style={styles.listItemDescription}>{item.description}</Text>
                 <View style={styles.listSubOptions}>
-                  <Text>{`${item.isCompleted === CompletionStatus.COMPLETED ? "Done" : "In Progress"}`}</Text>
-                  <View style={item.isCompleted === CompletionStatus.COMPLETED ? styles.greenCircle : styles.yellowCircle}></View>
+                  <Text>{`${item.completed ? "Complete" : "In Progress"}`}</Text>
+                  <View style={item.completed ? styles.greenCircle : styles.yellowCircle}></View>
                 </View>
               </View>
-              <View style={styles.listItemAvatar}>
-                <Image style={styles.listItemImage} source={{ uri: item?.pictureUrl as string }} />
-                <Text style={styles.listItemDescription}>{item?.firstName}</Text>
-              </View>
+              {user === item.accountId ? <View style={styles.listItemAvatar}>
+                <TouchableOpacity disabled={item.completed} style={styles.listItemImage} onPress={() => completeTask(item.id)}>
+                  {<Image style={styles.listItemImage} source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/1024px-Eo_circle_green_checkmark.svg.png' }} />
+                  }
+                </TouchableOpacity>
+                <Text style={styles.listItemDescription}>Mark as Completed</Text>
+              </View> :
+                <View style={styles.listItemAvatar}>
+                  <Image style={styles.listItemImage} source={{ uri: item?.pictureUrl as string }} />
+                  <Text style={styles.listItemDescription}>{item?.firstName}</Text>
+                </View>
+              }
             </View>
           }}
         />

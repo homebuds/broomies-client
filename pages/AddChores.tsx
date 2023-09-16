@@ -92,7 +92,7 @@ const AddChores = ({ refetch }: IAddChores) => {
                 description: description,
                 householdId: household,
                 points: Number.isInteger(points) ? points as unknown as number : 5,
-                repitition: {
+                repetition: {
                     days: parsedDays
                 }
             })

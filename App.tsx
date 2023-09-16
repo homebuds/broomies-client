@@ -44,7 +44,6 @@ const App = () => {
     setIsLoading(true);
     try {
       const value = await AsyncStorage.getItem('user');
-      console.log(value)
       if (value !== null) {
         // We have data!!
         setUser(value);
@@ -52,7 +51,6 @@ const App = () => {
         setUser(undefined);
       }
       const householdId = await AsyncStorage.getItem('household');
-      console.log("TESTING", householdId);
       if (householdId !== null) {
         // We have data!!
         setHousehold(householdId);
@@ -67,11 +65,6 @@ const App = () => {
   useEffect(() => {
     retrieveUser();
   }, []);
-  useEffect(() => {
-    console.log('hi');
-    console.log(user)
-    console.log(household)
-  }, [user])
   return (
     <SafeAreaProvider>
       {isLoading ?
@@ -85,11 +78,14 @@ const App = () => {
                 backgroundColor: '#ECF0EB',
               }, headerShown: true
             }} tabBar={(props) => <Footer {...props} />}>
-              <Tab.Screen name="Home" component={Home} options={{headerTitle: () => <HomeHeader title='hi' user={user}/>, headerStyle: {elevation: 0,
-                shadowOpacity: 0,
-                borderBottomWidth: 0,
-                backgroundColor: '#ECF0EB',
-                marginTop: 10}}} />
+              <Tab.Screen name="Home" component={Home} options={{
+                headerTitle: () => <HomeHeader title='hi' user={user} />, headerStyle: {
+                  elevation: 0,
+                  shadowOpacity: 0,
+                  borderBottomWidth: 0,
+                  backgroundColor: '#ECF0EB'
+                }
+              }} />
               <Tab.Screen name="Chores" children={(props) => <CustomChoresTab {...props} user={user} />} />
               <Tab.Screen name="Bills" component={Bills} />
               <Tab.Screen name="Log Out" children={(props) => <SignOut {...props} refetch={retrieveUser} />} />

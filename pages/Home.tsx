@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, Text, View, StyleSheet} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, Text, View, StyleSheet } from 'react-native';
 import { AssignedChore } from '../types/backend';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import HorizontalList from '../components/HorizontalList';
-import { assignedChores, accounts, chores } from '../testdata';
 import LeaderboardBarChart from '../components/Leaderboard';
 import VerticalBarChart from '../components/Leaderboard';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
   container: {
@@ -49,37 +50,51 @@ interface IHome {
     user?: string;
 }
 
-const Home = ({user} : IHome) => {
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState<AssignedChore[]>([]);
+const Home = ({ user }: IHome) => {
+    const [household, setHousehold] = useState('');
+    const [isLoading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
 
-  const getMovies = async () => {
-    try {
-      let tempChores = assignedChores.map(aChore => {
-        const chore = chores.find(chore => aChore.choreId === chore.id)
-        const account = accounts.find(account => account.accountId === aChore.accountId);
-          return {
-            ...aChore,
-            choreDescription: chore?.choreDescription,
-            choreName: chore?.choreName,
-            firstName: account?.firstName,
-            lastName: account?.lastName
-          }
-      });
-      if (user) {
-        tempChores = tempChores.filter(chore => chore.accountId === user)
-      }
-      setData(tempChores);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const getChores = async () => {
+        const fetchChores = async () => {
+            setLoading(true);
+            try {
+                const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/list/${household}`);
+                let tempChores = res.data;
+                if (user) {
+                    tempChores = tempChores.filter(chore => chore.accountId === user)
+                }
+                setData(tempChores.map(chore => {
+                    return {
+                        ...chore.chore,
+                        ...chore.account,
+                        dueDate: chore?.dueDate,
+                        id: chore.id,
+                        accountId: chore.accountId,
+                        completed: chore?.completed
+                    }
+                }).sort((a, b) => Date.parse(a.dueDate) - Date.parse(b.dueDate)));
+            } catch (e) {
+                console.log(e)
+            }
+            setLoading(false);
+        }
+        fetchChores()
+    };
 
-  useEffect(() => {
-    getMovies();
-  }, []);
+    useEffect(() => {
+        const getHousehold = async () => {
+            try {
+                const householdId = await AsyncStorage.getItem('household');
+                if (householdId) {
+                    setHousehold(householdId)
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        getHousehold();
+    }, []);
 
   const dat = [
     { label: 'Category 1', value: 30 },
@@ -88,6 +103,11 @@ const Home = ({user} : IHome) => {
   ];
   
   // Render the vertical bar chart
+  useEffect(() => {
+      if (household) {
+          getChores();
+      }
+  }, [household]);
   
 
   return (
