@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 20,
         borderTopEndRadius: 20,
         backgroundColor: '#ffffff',
-        boxShadow: "1px 4px 15px 2px rgba(0,0,0,0.66)",
+        boxShadow: "3px 4px 15px 2px rgba(0,0,0,0.66)",
     },
     listItem: {
         padding: 16,
@@ -73,8 +73,8 @@ const HorizontalList = ({ items }: IHorizontalList) => {
 
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Chores in progress</Text>
+        <View style={[styles.container, styles.listItemShadow]}>
+            <Text style={styles.title}>My Chores</Text>
             <FlatList
                 style={styles.flatListContainer}
                 data={items}
