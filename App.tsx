@@ -35,34 +35,6 @@ const MyTheme = {
 const App = () => {
   const [user, setUser] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(true);
-  const ChoresTabNavigator = () => {
-    return (
-      <ChoresTab.Navigator>
-        <ChoresTab.Screen name="All" component={Chores} />
-        <ChoresTab.Screen name="My Chores" children={(props) => <Chores {...props} user={user} />} />
-      </ChoresTab.Navigator>
-    );
-  }
-  const ChoresStackNavigator = () => (
-    <ChoresStack.Navigator>
-      <ChoresStack.Screen
-        name="ChoresTab"
-        component={ChoresTabNavigator}
-        options={{
-          headerRight: () => (
-            <TouchableOpacity
-              style={{ marginRight: 20, width: 50, height: 50, alignItems: 'center', justifyContent: 'center' }}
-              onPress={() => {
-                // Handle the "+" button press here
-              }}
-            >
-              <Text style={{ fontSize: 30 }}>+</Text>
-            </TouchableOpacity>
-          ),
-        }}
-      />
-    </ChoresStack.Navigator>
-  );
 
   const retrieveUser = async () => {
     setIsLoading(true);
@@ -90,7 +62,11 @@ const App = () => {
         ) :
         <NavigationContainer theme={MyTheme}>
           {user ?
-            <Tab.Navigator screenOptions={{ headerShown: true }}>
+            <Tab.Navigator screenOptions={{
+              headerStyle: {
+                backgroundColor: '#ECF0EB'
+              }, headerShown: true
+            }}>
               <Tab.Screen name="Home" component={Home} options={{ title: `Hello ${user}!` }} />
               <Tab.Screen name="Chores" children={(props) => <CustomChoresTab {...props} user={user} />} />
               <Tab.Screen name="Bills" component={Bills} />
