@@ -86,7 +86,7 @@ const HorizontalList = ({ items }: IHorizontalList) => {
                         <Text>{item.choreName}</Text>
                         <View style={styles.listSubOptions}>
                             <Text>{item.firstName} {item.lastName}</Text>
-                            {item.isCompleted ? (
+                            {item.completed ? (
                                 <View style={styles.greenCircle}></View>
                             ) : (
                                 <View style={styles.redCircle}></View>
