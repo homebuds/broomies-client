@@ -110,12 +110,10 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
       try {
         const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/list/${household}`);
         let tempChores = res.data;
-        console.log(tempChores);
         if (user) {
           tempChores = tempChores.filter(chore => chore.accountId === user)
         }
         setData(tempChores.map(chore => {
-          console.log(chore)
           return {
             ...chore.chore,
             ...chore.account,
@@ -134,7 +132,6 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
   };
 
   const completeTask = async (id: string) => {
-    console.log(id);
     const res = await axios.patch(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/${id}/complete`);
     if (res) {
       setRefetch(true);
@@ -147,8 +144,6 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
         const householdId = await AsyncStorage.getItem('household');
         if (householdId) {
           setHousehold(householdId)
-        } else {
-          console.log('nononon')
         }
       } catch (err) {
         console.log(err);

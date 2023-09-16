@@ -44,7 +44,6 @@ const App = () => {
     setIsLoading(true);
     try {
       const value = await AsyncStorage.getItem('user');
-      console.log(value)
       if (value !== null) {
         // We have data!!
         setUser(value);
@@ -52,7 +51,6 @@ const App = () => {
         setUser(undefined);
       }
       const householdId = await AsyncStorage.getItem('household');
-      console.log("TESTING", householdId);
       if (householdId !== null) {
         // We have data!!
         setHousehold(householdId);
@@ -67,11 +65,6 @@ const App = () => {
   useEffect(() => {
     retrieveUser();
   }, []);
-  useEffect(() => {
-    console.log('hi');
-    console.log(user)
-    console.log(household)
-  }, [user])
   return (
     <SafeAreaProvider>
       {isLoading ?

@@ -54,7 +54,7 @@ const CustomChoresTab = ({ user }: ICustomerChoresTab) => {
   const [refetch, setRefetch] = useState(true)
   return (
     <ChoresTab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
-      <ChoresTab.Screen name="All" children={(props) => <Chores {...props} refetch={refetch} setRefetch={setRefetch} />} />
+      <ChoresTab.Screen name="This Week" children={(props) => <Chores {...props} refetch={refetch} setRefetch={setRefetch} />} />
       <ChoresTab.Screen name="My Chores" children={(props) => <Chores {...props} user={user} refetch={refetch} setRefetch={setRefetch} />} />
       <ChoresTab.Screen name="Add" children={(props) => <AddChores {...props} refetch={() => setRefetch(true)} />} />
     </ChoresTab.Navigator>

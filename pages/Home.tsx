@@ -57,12 +57,10 @@ const Home = ({ user }: IHome) => {
             try {
                 const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/list/${household}`);
                 let tempChores = res.data;
-                console.log(tempChores);
                 if (user) {
                     tempChores = tempChores.filter(chore => chore.accountId === user)
                 }
                 setData(tempChores.map(chore => {
-                    console.log(chore)
                     return {
                         ...chore.chore,
                         ...chore.account,
@@ -86,8 +84,6 @@ const Home = ({ user }: IHome) => {
                 const householdId = await AsyncStorage.getItem('household');
                 if (householdId) {
                     setHousehold(householdId)
-                } else {
-                    console.log('nononon')
                 }
             } catch (err) {
                 console.log(err);
