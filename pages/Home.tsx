@@ -99,6 +99,34 @@ const assignedChores: AssignedChore[] = [
     date: new Date("2023-09-20"),
     isCompleted: false,
   },
+  {
+    id: "8",
+    choreId: "c3",
+    accountId: "a4",
+    date: new Date("2023-09-16"),
+    isCompleted: true,
+  },
+  {
+    id: "9",
+    choreId: "c2",
+    accountId: "a3",
+    date: new Date("2023-09-20"),
+    isCompleted: false,
+  },
+  {
+    id: "10",
+    choreId: "c3",
+    accountId: "a4",
+    date: new Date("2023-09-16"),
+    isCompleted: true,
+  },
+  {
+    id: "11",
+    choreId: "c2",
+    accountId: "a3",
+    date: new Date("2023-09-20"),
+    isCompleted: false,
+  },
 ];
 
 const accounts: Account[] = [
@@ -160,6 +188,9 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: 'green',
   },
+  flatListContainer: {
+    maxHeight: '100%',
+  }
 });
 
 const Home = () => {
@@ -196,6 +227,7 @@ const Home = () => {
         <ActivityIndicator />
       ) : (
         <FlatList
+        style={styles.flatListContainer}
           data={data}
           keyExtractor={({id}) => id}
           renderItem={({item}) => (
