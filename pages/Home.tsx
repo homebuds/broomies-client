@@ -7,7 +7,6 @@ import { assignedChores, accounts, chores } from '../testdata';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 4,
   },
   listItem: {
     padding: 16,

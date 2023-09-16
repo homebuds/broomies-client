@@ -16,6 +16,8 @@ import SignIn from './pages/SignIn';
 import SignOut from './pages/SignOut';
 import Home from './pages/Home';
 import Bills from './pages/Bills';
+import { View } from 'react-native';
+import HomeHeader from './components/CutsomeHomeHeader';
 import { User } from './types/backend';
 
 const ChoresTab = createMaterialTopTabNavigator();
@@ -76,14 +78,18 @@ const App = () => {
         (
           <ActivityIndicator />
         ) :
-        <NavigationContainer theme={MyTheme}>
+        <NavigationContainer theme={MyTheme} >
           {user ?
             <Tab.Navigator screenOptions={{
               headerStyle: {
                 backgroundColor: '#ECF0EB',
               }, headerShown: true
             }} tabBar={(props) => <Footer {...props} />}>
-              <Tab.Screen name="Home" component={Home} options={{ title: `Hello ${user}!` }} />
+              <Tab.Screen name="Home" component={Home} options={{headerTitle: () => <HomeHeader title='hi' user={user}/>, headerStyle: {elevation: 0,
+                shadowOpacity: 0,
+                borderBottomWidth: 0,
+                backgroundColor: '#ECF0EB',
+                marginTop: 10}}} />
               <Tab.Screen name="Chores" children={(props) => <CustomChoresTab {...props} user={user} />} />
               <Tab.Screen name="Bills" component={Bills} />
               <Tab.Screen name="Log Out" children={(props) => <SignOut {...props} refetch={retrieveUser} />} />
