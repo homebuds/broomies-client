@@ -14,6 +14,7 @@ export type AssignedChore = {
     choreName?: string;
     firstName?: string;
     lastName?: string;
+    photo?: string;
   };
   
   export type Account = {
@@ -21,6 +22,7 @@ export type AssignedChore = {
     firstName: string;
     lastName: string;
     email: string;
+    photo: string;
   };
   
   export type Chore = {
