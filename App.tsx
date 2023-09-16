@@ -5,12 +5,12 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { TouchableOpacity, Text } from 'react-native';
+import Footer from './components/Footer';
 import {
   SafeAreaProvider
 } from 'react-native-safe-area-context';
 import CustomChoresTab from './components/CustomChoresTab';
-import Chores from './pages/Chores';
+import HomeIcon from './icons/home.svg';
 import SignIn from './pages/SignIn';
 import SignOut from './pages/SignOut';
 import Home from './pages/Home';
@@ -30,7 +30,6 @@ const MyTheme = {
     background: '#ECF0EB'
   },
 };
-
 
 const App = () => {
   const [user, setUser] = useState<string | undefined>();
@@ -66,7 +65,7 @@ const App = () => {
               headerStyle: {
                 backgroundColor: '#ECF0EB'
               }, headerShown: true
-            }}>
+            }} tabBar={(props) => <Footer {...props} />}>
               <Tab.Screen name="Home" component={Home} options={{ title: `Hello ${user}!` }} />
               <Tab.Screen name="Chores" children={(props) => <CustomChoresTab {...props} user={user} />} />
               <Tab.Screen name="Bills" component={Bills} />
