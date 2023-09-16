@@ -35,6 +35,7 @@ const MyTheme = {
 
 const App = () => {
   const [user, setUser] = useState<string | undefined>();
+  const [household, setHousehold] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(true);
 
   const retrieveUser = async () => {
@@ -48,6 +49,14 @@ const App = () => {
       } else {
         setUser(undefined);
       }
+      const householdId = await AsyncStorage.getItem('household');
+      console.log("TESTING", householdId);
+      if (householdId !== null) {
+        // We have data!!
+        setHousehold(householdId);
+      } else {
+        setHousehold(undefined);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -59,6 +68,7 @@ const App = () => {
   useEffect(() => {
     console.log('hi');
     console.log(user)
+    console.log(household)
   }, [user])
   return (
     <SafeAreaProvider>
