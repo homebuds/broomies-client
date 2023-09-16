@@ -123,7 +123,6 @@ const Chores = ({ user }: IChores) => {
       setLoading(false);
     }
   };
-  console.log(data);
 
   useEffect(() => {
     getMovies();
