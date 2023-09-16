@@ -11,40 +11,39 @@ interface HeaderProps {
 
 const HomeHeader: React.FC<HeaderProps> = ({ title, user }) => {
 
-    const [userData, setUserData] = useState({photo: '', name: ''});
+  const [userData, setUserData] = useState({ photo: '', name: '' });
 
-    const getMovies = async () => {
-        try {
-            let tempChores = assignedChores.map(aChore => {
-                const account = accounts.find(account => account.accountId === aChore.accountId);
+  const getMovies = async () => {
+    try {
+      let tempChores = assignedChores.map(aChore => {
+        const account = accounts.find(account => account.accountId === aChore.accountId);
+        setUserData({
+          photo: account?.photo ?? '',
+          name: account?.firstName ?? ''
+        })
+      });
+    } catch (error) {
+      console.error(error);
+    };
+  }
 
-                setUserData({
-                    photo: account?.photo ?? '',
-                    name: account?.firstName ?? ''
-                })
-            });
-        } catch (error) {
-            console.error(error);
-        };
-    }
-    
-    useEffect(() => {
-        getMovies();
-    }, []);
+  useEffect(() => {
+    getMovies();
+  }, []);
 
-    return (
+  return (
     <View style={styles.header}>
-        <View style={styles.headerUserInfo} >
-            <Image style={styles.headerImage} source={{ uri: userData.photo as string }} />
+      <View style={styles.headerUserInfo} >
+        <Image style={styles.headerImage} source={{ uri: userData.photo as string }} />
 
-            <View>
-                <Text style={styles.headerMessage}>Welcome back!👋</Text>
-                <Text style={styles.headerName}>{userData.name}</Text>
-            </View>
-        </View>
         <View>
-            <Image style={styles.headerImage} source={require('../icons/Notification.png')} />
+          <Text style={styles.headerMessage}>Welcome back!👋</Text>
+          <Text style={styles.headerName}>{userData.name}</Text>
         </View>
+      </View>
+      <View>
+        <Image style={styles.headerImage} source={require('../icons/Notification.png')} />
+      </View>
     </View>
   );
 };
