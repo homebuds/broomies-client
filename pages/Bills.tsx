@@ -193,11 +193,11 @@ const styles = StyleSheet.create({
   }
 });
 
-interface IHome {
+interface IBills {
     user?: string;
 }
 
-const Home = ({user} : IHome) => {
+const Bills = ({user} : IBills) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<AssignedChore[]>([]);
 
@@ -257,4 +257,4 @@ const Home = ({user} : IHome) => {
   );
 };
 
-export default Home;
+export default Bills;
