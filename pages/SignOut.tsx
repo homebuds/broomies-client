@@ -3,27 +3,29 @@ import { View, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface ISignOut {
-    refetch: () => void;
+  refetch: () => void;
 }
 
-const SignOut = ({refetch}: ISignOut) => {
+const SignOut = ({ refetch }: ISignOut) => {
 
   const handleSignOut = async () => {
     try {
-        await AsyncStorage.removeItem(
+      await AsyncStorage.removeItem(
         'user'
-        );
-        refetch();
+      );
+      await AsyncStorage.removeItem(
+        'household');
+      refetch();
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   };
 
-  useEffect(() => {handleSignOut();}, [])
+  useEffect(() => { handleSignOut(); }, [])
 
   return (
     <View>
-        <ActivityIndicator />
+      <ActivityIndicator />
     </View>
   );
 };

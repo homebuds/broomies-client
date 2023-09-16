@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Text, View, StyleSheet, Image } from 'react-native';
 import { assignedChores, accounts, chores } from '../testdata';
 import { AssignedChore, CompletionStatus } from '../types/backend';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
   container: {
@@ -93,40 +94,45 @@ const styles = StyleSheet.create({
 
 interface IChores {
   user?: string;
+  refetch: boolean;
+  setRefetch: (a: boolean) => void;
 }
 
-const Chores = ({ user }: IChores) => {
+const Chores = ({ user, refetch, setRefetch }: IChores) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<AssignedChore[]>([]);
 
-  const getMovies = async () => {
-    try {
-      let tempChores = assignedChores.map(aChore => {
-        const chore = chores.find(chore => aChore.choreId === chore.id)
-        const account = accounts.find(account => account.accountId === aChore.accountId);
-        return {
-          ...aChore,
-          choreDescription: chore?.choreDescription,
-          choreName: chore?.choreName,
-          firstName: account?.firstName,
-          lastName: account?.lastName,
-          photo: account?.photo
-        }
-      });
+  const getChores = async () => {
+    const fetchChores = async () => {
+      setLoading(true);
+      const res = await axios.get('https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/list/356347e6-06e4-49e2-a31e-8c920851bbfd')
+      let tempChores = res.data;
+      console.log("ALL", tempChores);
       if (user) {
-        tempChores = tempChores.filter(chore => chore.accountId === user)
+        tempChores = tempChores.filter(chore => chore.account_id === user)
       }
-      setData(tempChores);
-    } catch (error) {
-      console.error(error);
-    } finally {
+      setData(tempChores.map(chore => {
+        console.log(chore)
+        return {
+          ...chore.chore,
+          ...chore.account
+        }
+      }));
       setLoading(false);
     }
+    fetchChores()
   };
 
   useEffect(() => {
-    getMovies();
+    getChores();
   }, []);
+
+  useEffect(() => {
+    if (refetch) {
+      getChores();
+      setRefetch(false);
+    }
+  }, [refetch]);
 
   return (
     <View style={styles.container}>
@@ -138,11 +144,12 @@ const Chores = ({ user }: IChores) => {
           data={data}
           keyExtractor={({ id }) => id}
           ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
-          renderItem={({ item }) => (
-            <View style={[styles.listItemShadow, item.isCompleted === CompletionStatus.COMPLETED ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
+          renderItem={({ item }) => {
+            console.log(item)
+            return <View key={item.ID} style={[styles.listItemShadow, item.isCompleted === CompletionStatus.COMPLETED ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
               <View style={{ flex: 1 }}>
-                <Text style={styles.listItemTitle}>{item.choreName}</Text>
-                <Text style={styles.listItemDescription}>{item.choreDescription}</Text>
+                <Text style={styles.listItemTitle}>{item.name}</Text>
+                <Text style={styles.listItemDescription}>{item.description}</Text>
                 <View style={styles.listSubOptions}>
                   <Text>{`${item.isCompleted === CompletionStatus.COMPLETED ? "Done" : "In Progress"}`}</Text>
                   <View style={item.isCompleted === CompletionStatus.COMPLETED ? styles.greenCircle : styles.yellowCircle}></View>
@@ -153,7 +160,7 @@ const Chores = ({ user }: IChores) => {
                 <Text style={styles.listItemDescription}>{item?.firstName}</Text>
               </View>
             </View>
-          )}
+          }}
         />
       )}
     </View>

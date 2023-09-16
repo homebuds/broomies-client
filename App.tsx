@@ -7,7 +7,8 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Footer from './components/Footer';
 import {
-  SafeAreaProvider
+  SafeAreaProvider,
+  useSafeAreaInsets
 } from 'react-native-safe-area-context';
 import CustomChoresTab from './components/CustomChoresTab';
 import HomeIcon from './icons/home.svg';
@@ -15,6 +16,7 @@ import SignIn from './pages/SignIn';
 import SignOut from './pages/SignOut';
 import Home from './pages/Home';
 import Bills from './pages/Bills';
+import { User } from './types/backend';
 
 const ChoresTab = createMaterialTopTabNavigator();
 
@@ -39,6 +41,7 @@ const App = () => {
     setIsLoading(true);
     try {
       const value = await AsyncStorage.getItem('user');
+      console.log(value)
       if (value !== null) {
         // We have data!!
         setUser(value);
@@ -53,6 +56,10 @@ const App = () => {
   useEffect(() => {
     retrieveUser();
   }, []);
+  useEffect(() => {
+    console.log('hi');
+    console.log(user)
+  }, [user])
   return (
     <SafeAreaProvider>
       {isLoading ?
@@ -63,7 +70,7 @@ const App = () => {
           {user ?
             <Tab.Navigator screenOptions={{
               headerStyle: {
-                backgroundColor: '#ECF0EB'
+                backgroundColor: '#ECF0EB',
               }, headerShown: true
             }} tabBar={(props) => <Footer {...props} />}>
               <Tab.Screen name="Home" component={Home} options={{ title: `Hello ${user}!` }} />
