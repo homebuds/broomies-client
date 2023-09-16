@@ -3,10 +3,14 @@ import {ActivityIndicator, FlatList, Text, View, StyleSheet} from 'react-native'
 import { AssignedChore } from '../types/backend';
 import HorizontalList from '../components/HorizontalList';
 import { assignedChores, accounts, chores } from '../testdata';
+import LeaderboardBarChart from '../components/Leaderboard';
+import VerticalBarChart from '../components/Leaderboard';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: "auto",
+    height: '100%'
   },
   listItem: {
     padding: 16,
@@ -77,6 +81,15 @@ const Home = ({user} : IHome) => {
     getMovies();
   }, []);
 
+  const dat = [
+    { label: 'Category 1', value: 30 },
+    { label: 'Category 2', value: 50 },
+    { label: 'Category 3', value: 20 },
+  ];
+  
+  // Render the vertical bar chart
+  
+
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -84,6 +97,9 @@ const Home = ({user} : IHome) => {
       ) : (
         <>
         <View style={{flex: 1}}></View>
+        <View>
+          <VerticalBarChart data={dat} />
+        </View>
         <HorizontalList items={data} />
         </>
       )}
