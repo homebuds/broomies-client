@@ -70,6 +70,7 @@ const Home = ({ user }: IHome) => {
                 const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/list/${household}`);
                 let tempChores = res.data;
                 if (user) {
+                    console.log("filter")
                     tempChores = tempChores.filter(chore => chore.accountId === user)
                 }
                 setData(tempChores.map(chore => {
@@ -140,7 +141,7 @@ const Home = ({ user }: IHome) => {
                     <View style={{ bottom: -10, paddingEnd: 0, height: 600, flex: 1, flexDirection: "row", alignItems: "flex-end", columnGap: 20, flexWrap: "wrap", justifyContent: "center" }}>
                         {
                             placements.map((placement, index) =>
-                                <View style={{ display: "flex", flex: 1, flexDirection: "column", alignItems: "center", rowGap: 5, marginBottom: -25, maxWidth: 70 }}>
+                                <View key={index} style={{ display: "flex", flex: 1, flexDirection: "column", alignItems: "center", rowGap: 5, marginBottom: -25, maxWidth: 70 }}>
                                     {placement.id === max.id && <Text style={styles.listItemCrown}>👑</Text>}
                                     <Image style={styles.listItemImage} source={{ uri: placement?.pictureUrl as string }} />
                                     <Text style={{
@@ -151,7 +152,6 @@ const Home = ({ user }: IHome) => {
                                 </View>
                             )
                         }
-                        <VerticalBarChart data={data} />
                     </View>
                     <HorizontalList items={data} />
                 </>
