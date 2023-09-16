@@ -1,160 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, Text, View, StyleSheet} from 'react-native';
-
-type AssignedChore = {
-  id: string;
-  choreId: string;
-  accountId: string;
-  date: Date;
-  isCompleted: boolean;
-  choreDescription?: string;
-  choreName?: string;
-  firstName?: string;
-  lastName?: string;
-};
-
-type Account = {
-  accountId: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-};
-
-type Chore = {
-  id: string;
-  choreDescription: string;
-  choreName: string;
-};
-
-const chores: Chore[] = [
-  {
-    id: "c1",
-    choreDescription: "Take out the trash",
-    choreName: "Trash Duty",
-  },
-  {
-    id: "c2",
-    choreDescription: "Wash the dishes",
-    choreName: "Dishwashing",
-  },
-  {
-    id: "c3",
-    choreDescription: "Vacuum the living room",
-    choreName: "Vacuum",
-  },
-  {
-    id: "c4",
-    choreDescription: "Clean the bathroom",
-    choreName: "Bathroom Cleanup",
-  },
-];
-
-const assignedChores: AssignedChore[] = [
-  {
-    id: "1",
-    choreId: "c1",
-    accountId: "a1",
-    date: new Date("2023-09-16"),
-    isCompleted: false,
-  },
-  {
-    id: "2",
-    choreId: "c2",
-    accountId: "a1",
-    date: new Date("2023-09-17"),
-    isCompleted: true,
-  },
-  {
-    id: "3",
-    choreId: "c3",
-    accountId: "a2",
-    date: new Date("2023-09-16"),
-    isCompleted: false,
-  },
-  {
-    id: "4",
-    choreId: "c4",
-    accountId: "a2",
-    date: new Date("2023-09-18"),
-    isCompleted: false,
-  },
-  {
-    id: "5",
-    choreId: "c1",
-    accountId: "a3",
-    date: new Date("2023-09-19"),
-    isCompleted: false,
-  },
-  {
-    id: "6",
-    choreId: "c3",
-    accountId: "a4",
-    date: new Date("2023-09-16"),
-    isCompleted: true,
-  },
-  {
-    id: "7",
-    choreId: "c2",
-    accountId: "a3",
-    date: new Date("2023-09-20"),
-    isCompleted: false,
-  },
-  {
-    id: "8",
-    choreId: "c3",
-    accountId: "a4",
-    date: new Date("2023-09-16"),
-    isCompleted: true,
-  },
-  {
-    id: "9",
-    choreId: "c2",
-    accountId: "a3",
-    date: new Date("2023-09-20"),
-    isCompleted: false,
-  },
-  {
-    id: "10",
-    choreId: "c3",
-    accountId: "a4",
-    date: new Date("2023-09-16"),
-    isCompleted: true,
-  },
-  {
-    id: "11",
-    choreId: "c2",
-    accountId: "a3",
-    date: new Date("2023-09-20"),
-    isCompleted: false,
-  },
-];
-
-const accounts: Account[] = [
-  {
-    accountId: "a1",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-  },
-  {
-    accountId: "a2",
-    firstName: "Jane",
-    lastName: "Doe",
-    email: "jane.doe@example.com",
-  },
-  {
-    accountId: "a3",
-    firstName: "Emily",
-    lastName: "Smith",
-    email: "emily.smith@example.com",
-  },
-  {
-    accountId: "a4",
-    firstName: "Tom",
-    lastName: "Brown",
-    email: "tom.brown@example.com",
-  },
-];
+import { assignedChores, accounts, chores } from '../testdata';
+import { AssignedChore } from '../types/backend';
 
 const styles = StyleSheet.create({
   container: {
@@ -177,6 +24,15 @@ const styles = StyleSheet.create({
   },
   shadowOpacity: 0.2,
   shadowRadius: 11,},
+  listItemTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    marginBottom: 8
+  },
+  listItemDescription: {
+    fontSize: 12,
+    fontWeight: "500"
+  },
   listSubOptions: {
     display: 'flex',
     flexDirection: 'row',
@@ -251,15 +107,16 @@ const Chores = ({user} : IChores) => {
           ItemSeparatorComponent={() => <View style={{height: 25}} />}
           renderItem={({item}) => (
             <View style={[styles.listItem, styles.listItemShadow]}>
-              <Text>{item.choreName}</Text>
-              <View style={styles.listSubOptions}>
+              <Text style={styles.listItemTitle}>{item.choreName}</Text>
+              <Text style={styles.listItemDescription}>{item.choreDescription}</Text>
+              {/* <View style={styles.listSubOptions}>
                 <Text>{item.firstName} {item.lastName}</Text>
                 {item.isCompleted ? (
         <View style={styles.greenCircle}></View>
       ) : (
         <View style={styles.redCircle}></View>
       )}
-              </View>
+              </View> */}
             </View>
           )}
         />

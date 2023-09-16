@@ -1,9 +1,15 @@
+export enum CompletionStatus {
+    COMPLETED = 'completed',
+    IN_PROGRESS = 'in progress',
+    INCOMPLETE = 'incomplete',
+  }
+
 export type AssignedChore = {
     id: string;
     choreId: string;
     accountId: string;
     date: Date;
-    isCompleted: boolean;
+    isCompleted: CompletionStatus;
     choreDescription?: string;
     choreName?: string;
     firstName?: string;
@@ -22,4 +28,5 @@ export type AssignedChore = {
     choreDescription: string;
     choreName: string;
   };
+
   

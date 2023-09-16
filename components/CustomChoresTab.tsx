@@ -14,7 +14,7 @@ const CustomTabBar: React.FC<MaterialTopTabBarProps> = (props) => {
         <TouchableOpacity
           key={index}
           onPress={() => props.navigation.navigate(route.name)}
-          style={{margin: "auto",  flexGrow: 1, backgroundColor: state.index === index ? '#efefef' : 'transparent', borderRadius: 20}}
+          style={{margin: "auto",  flexGrow: 1, borderBottomWidth: state.index === index ? 1 : 0, borderColor:"black",borderRadius: 20, padding: 10}}
         >
           <Text style={{color: "#383838",
 fontSize: 20, textAlign: "center",
