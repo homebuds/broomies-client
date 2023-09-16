@@ -70,7 +70,6 @@ const Home = ({ user }: IHome) => {
                 const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/list/${household}`);
                 let tempChores = res.data;
                 if (user) {
-                    console.log("filter")
                     tempChores = tempChores.filter(chore => chore.accountId === user)
                 }
                 setData(tempChores.map(chore => {
@@ -122,7 +121,6 @@ const Home = ({ user }: IHome) => {
     const max = placements.reduce(function (prev, current) {
         return (prev && prev.points > current.points) ? prev : current
     }) //returns object
-    console.log(max);
 
     // Render the vertical bar chart
     useEffect(() => {
