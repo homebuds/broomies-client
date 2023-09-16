@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, Text, View, StyleSheet} from 'react-native';
 import { assignedChores, accounts, chores } from '../testdata';
-import { AssignedChore } from '../types/backend';
+import { AssignedChore, CompletionStatus } from '../types/backend';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +15,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     borderRadius: 20,
     height: 115,
-    width: "100%"
+    width: "100%",
+    display: "flex",
   },
   listItemShadow: {   shadowColor: '#212121',
   shadowOffset: {
@@ -31,27 +32,40 @@ const styles = StyleSheet.create({
   },
   listItemDescription: {
     fontSize: 12,
-    fontWeight: "500"
+    fontWeight: "400",
+    flex: 1
   },
   listSubOptions: {
     display: 'flex',
     flexDirection: 'row',
     alignContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
+    columnGap: 5,
+    width: '100%'
   },
   redCircle: {
     width: 10,
     height: 10,
     borderRadius: 25,
-    backgroundColor: 'red',
+    backgroundColor: '#FA9A9A',
   },
   greenCircle: {
     width: 10,
     height: 10,
     borderRadius: 25,
-    backgroundColor: 'green',
+    backgroundColor: '#B9EAB3',
+  },
+  yellowCircle: {
+    width: 10,
+    height: 10,
+    borderRadius: 25,
+    backgroundColor: '#EDEA9B',
+  },
+  listItemComplete: {
+    backgroundColor: '#F4FFE5'
+  },
+  listItemInProgress: {
+    backgroundColor: '#FFFDEA'
   },
   flatListContainer: {
     maxHeight: '100%',
@@ -106,17 +120,13 @@ const Chores = ({user} : IChores) => {
           keyExtractor={({id}) => id}
           ItemSeparatorComponent={() => <View style={{height: 25}} />}
           renderItem={({item}) => (
-            <View style={[styles.listItem, styles.listItemShadow]}>
+            <View style={[styles.listItem, styles.listItemShadow, item.isCompleted === CompletionStatus.COMPLETED ? styles.listItemComplete: styles.listItemInProgress]}>
               <Text style={styles.listItemTitle}>{item.choreName}</Text>
               <Text style={styles.listItemDescription}>{item.choreDescription}</Text>
-              {/* <View style={styles.listSubOptions}>
-                <Text>{item.firstName} {item.lastName}</Text>
-                {item.isCompleted ? (
-        <View style={styles.greenCircle}></View>
-      ) : (
-        <View style={styles.redCircle}></View>
-      )}
-              </View> */}
+              <View style={styles.listSubOptions}>
+                <Text>{`${item.isCompleted === CompletionStatus.COMPLETED ? "Done": "In Progress"}`}</Text>
+        <View style={item.isCompleted === CompletionStatus.COMPLETED ? styles.greenCircle: styles.yellowCircle}></View>
+              </View>
             </View>
           )}
         />
