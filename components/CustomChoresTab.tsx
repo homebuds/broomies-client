@@ -12,9 +12,8 @@ const CustomTabBar: React.FC<MaterialTopTabBarProps> = (props) => {
     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', maxWidth: "100%", paddingLeft: 25, paddingRight: 25 }}>
       {/* Render the default tab bar */}
       <View style={{ display: "flex", flexDirection: 'row', alignItems: 'center', flex: 1, width: "100%" }}>
-        {props.state.routes.map((route, index) => <>{
+        {props.state.routes.map((route, index) => <View key={index}>{
           route.name === "Add" ? <TouchableOpacity
-            key={index}
             style={{ width: 35, height: 35, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 50, backgroundColor: "#ffffff" }}
             onPress={() => props.navigation.navigate(route.name)}
           >
@@ -32,7 +31,7 @@ const CustomTabBar: React.FC<MaterialTopTabBarProps> = (props) => {
               }}>{route.name}</Text>
             </TouchableOpacity>
         }
-        </>)}
+        </View>)}
       </View>
     </View>
   );

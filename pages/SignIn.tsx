@@ -43,12 +43,12 @@ const SignIn = ({ refetch }: ISignIn) => {
                 email: email
             })
             await AsyncStorage.setItem(
-                'user',
-                res.data.id,
+                'household',
+                res.data.householdId,
             );
             await AsyncStorage.setItem(
-                'household',
-                res.data.household_id,
+                'user',
+                res.data.id,
             );
             refetch();
         } catch (error) {
@@ -56,7 +56,6 @@ const SignIn = ({ refetch }: ISignIn) => {
         }
         setLoading(false);
     };
-
     return (
         <View style={styles.container}>
             {isLoading ? (

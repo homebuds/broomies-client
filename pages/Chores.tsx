@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Text, View, StyleSheet, Image } from 'react-native';
-import { assignedChores, accounts, chores } from '../testdata';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AssignedChore, CompletionStatus } from '../types/backend';
 import axios from 'axios';
 
@@ -100,31 +100,49 @@ interface IChores {
 
 const Chores = ({ user, refetch, setRefetch }: IChores) => {
   const [isLoading, setLoading] = useState(true);
+  const [household, setHousehold] = useState('');
   const [data, setData] = useState<AssignedChore[]>([]);
+  console.log(household);
 
   const getChores = async () => {
     const fetchChores = async () => {
       setLoading(true);
-      const res = await axios.get('https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/list/356347e6-06e4-49e2-a31e-8c920851bbfd')
-      let tempChores = res.data;
-      console.log("ALL", tempChores);
-      if (user) {
-        tempChores = tempChores.filter(chore => chore.account_id === user)
-      }
-      setData(tempChores.map(chore => {
-        console.log(chore)
-        return {
-          ...chore.chore,
-          ...chore.account
+      try {
+        const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/list/${household}`);
+        let tempChores = res.data;
+        if (user) {
+          tempChores = tempChores.filter(chore => chore.accountId === user)
         }
-      }));
+        setData(tempChores.map(chore => {
+          return {
+            ...chore.chore,
+            ...chore.account,
+            dueDate: chore?.dueDate,
+            id: chore.id,
+          }
+        }));
+      } catch (e) {
+        console.log(e)
+      }
       setLoading(false);
     }
     fetchChores()
   };
 
   useEffect(() => {
-    getChores();
+    const getHousehold = async () => {
+      try {
+        const householdId = await AsyncStorage.getItem('household');
+        if (householdId) {
+          setHousehold(householdId)
+        } else {
+          console.log('nononon')
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getHousehold();
   }, []);
 
   useEffect(() => {
@@ -134,6 +152,21 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
     }
   }, [refetch]);
 
+  useEffect(() => {
+    if (household) {
+      getChores();
+    }
+  }, [household]);
+
+  const getDate = (dateStr: string) => {
+    const timestamp = Date.parse(dateStr);
+    const date = new Date(timestamp);
+
+    const day = date.getDate(); // Day of the month (1-31)
+    const month = date.getMonth() + 1; // Month (0-11, but adding 1 to get 1-12)
+    const year = date.getFullYear(); // Full year
+    return `${day}/${month}/${year}`
+  }
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -146,8 +179,9 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
           ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
           renderItem={({ item }) => {
             console.log(item)
-            return <View key={item.ID} style={[styles.listItemShadow, item.isCompleted === CompletionStatus.COMPLETED ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
+            return <View key={item.id} style={[styles.listItemShadow, item.isCompleted === CompletionStatus.COMPLETED ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
               <View style={{ flex: 1 }}>
+                <Text style={styles.listItemDescription}>{getDate(item.dueDate)}</Text>
                 <Text style={styles.listItemTitle}>{item.name}</Text>
                 <Text style={styles.listItemDescription}>{item.description}</Text>
                 <View style={styles.listSubOptions}>
@@ -156,7 +190,7 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
                 </View>
               </View>
               <View style={styles.listItemAvatar}>
-                <Image style={styles.listItemImage} source={{ uri: item?.photo as string }} />
+                <Image style={styles.listItemImage} source={{ uri: item?.pictureUrl as string }} />
                 <Text style={styles.listItemDescription}>{item?.firstName}</Text>
               </View>
             </View>
