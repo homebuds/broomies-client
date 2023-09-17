@@ -7,25 +7,18 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Footer from './components/Footer';
 import {
-  SafeAreaProvider,
-  useSafeAreaInsets
+  SafeAreaProvider
 } from 'react-native-safe-area-context';
 import CustomChoresTab from './components/CustomChoresTab';
-import HomeIcon from './icons/home.svg';
 import SignIn from './pages/SignIn';
 import SignOut from './pages/SignOut';
 import Home from './pages/Home';
 import Bills from './pages/Bills';
-import { View } from 'react-native';
 import HomeHeader from './components/CustomHomeHeader';
-import { User } from './types/backend';
-
-const ChoresTab = createMaterialTopTabNavigator();
 
 const Stack = createNativeStackNavigator();
 
 const Tab = createBottomTabNavigator();
-const ChoresStack = createNativeStackNavigator();
 
 const MyTheme = {
   ...DefaultTheme,

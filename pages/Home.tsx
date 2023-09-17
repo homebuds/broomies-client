@@ -70,7 +70,7 @@ const Home = ({ user }: IHome) => {
         const fetchChores = async () => {
             setLoading(true);
             try {
-                const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/list/${household}`);
+                const res = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/list/${household}`);
                 let tempChores = res.data;
                 if (user) {
                     tempChores = tempChores.filter(chore => chore.accountId === user)
@@ -96,7 +96,7 @@ const Home = ({ user }: IHome) => {
     const getPlacements = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/top-roommates/${household}`);
+            const res = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/top-roommates/${household}`);
             let temp = res.data;
             setPlacements(temp)
         } catch (e) {
@@ -150,27 +150,27 @@ const Home = ({ user }: IHome) => {
     }, [placements]);
 
     const getCurrentMonth = () => {
-      const monthNames = [
-        'January', 'February', 'March', 'April',
-        'May', 'June', 'July', 'August',
-        'September', 'October', 'November', 'December'
-      ];
-    
-      const currentDate = new Date();
-      const currentMonthNumber = currentDate.getMonth(); // Zero-based month number
-    
-      const currentMonth = monthNames[currentMonthNumber];
-      
-      return currentMonth;
+        const monthNames = [
+            'January', 'February', 'March', 'April',
+            'May', 'June', 'July', 'August',
+            'September', 'October', 'November', 'December'
+        ];
+
+        const currentDate = new Date();
+        const currentMonthNumber = currentDate.getMonth(); // Zero-based month number
+
+        const currentMonth = monthNames[currentMonthNumber];
+
+        return currentMonth;
     };
 
     return (
         <View style={styles.container}>
             {isLoading ? (
-                <ActivityIndicator/>
+                <ActivityIndicator />
             ) : (
                 <>
-                    <Text style={{alignSelf: "center", alignItems: 'center', marginTop: 16, fontSize: 20, fontWeight: 700}}>{getCurrentMonth()}</Text>
+                    <Text style={{ alignSelf: "center", alignItems: 'center', marginTop: 16, fontSize: 20, fontWeight: 700 }}>{getCurrentMonth()}</Text>
                     <View style={{ bottom: -10, paddingEnd: 0, height: 600, flex: 1, flexDirection: "row", alignItems: "flex-end", columnGap: 20, flexWrap: "wrap", justifyContent: "center" }}>
                         {
                             placements.map((placement, index) =>

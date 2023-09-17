@@ -35,11 +35,11 @@ const HomeHeader: React.FC<HeaderProps> = ({ title, user }) => {
   return (
     <View style={styles.header}>
       <View style={styles.headerUserInfo} >
-        <Image style={styles.headerImage} source={loading ? require("../icons/emptyPic.png") : { uri: data?.pictureUrl as string }} />
+        <Image style={styles.headerImage} source={loading ? { uri: require("../icons/emptyPic.png") } : { uri: data.pictureUrl as string }} />
 
         <View>
           <Text style={styles.headerMessage}>Welcome back!👋</Text>
-          <Text style={styles.headerName}>{loading ? '' : data?.firstName}</Text>
+          <Text style={styles.headerName}>{loading ? '' : data.firstName}</Text>
         </View>
       </View>
       <View>
@@ -47,7 +47,7 @@ const HomeHeader: React.FC<HeaderProps> = ({ title, user }) => {
           <Image style={styles.headerImage} source={require('../icons/Notification.png')} />
         </TouchableOpacity>
       </View>
-      <NotificationsModal pictureUrl={data?.pictureUrl} title={"hihi"} notifications={[]} isVisible={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {/* <NotificationsModal notifications={[]} isVisible={isModalOpen} onClose={() => setIsModalOpen(false)}/> */}
     </View>
   );
 };
@@ -75,9 +75,8 @@ const styles = StyleSheet.create({
   },
   headerName: {
     fontSize: 15,
-    color: 'black',
+    color: 'black', // Text color
     marginRight: 'auto',
-    fontWeight: "bold",
   },
   headerImage: {
     width: 41,

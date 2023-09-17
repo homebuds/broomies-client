@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import HomeIcon from '../icons/home.svg'
+import HomeDarkIcon from '../icons/homedark.svg'
 import BroomIcon from '../icons/broom.svg'
 import MoneyIcon from '../icons/money.svg'
 import SignOutIcon from '../icons/signout.svg'

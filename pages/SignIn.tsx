@@ -39,7 +39,7 @@ const SignIn = ({ refetch }: ISignIn) => {
     const handleSignIn = async () => {
         setLoading(true);
         try {
-            const res = await axios.post('https://c682-2620-101-f000-704-00-12.ngrok-free.app/login', {
+            const res = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/login`, {
                 email: email
             })
             await AsyncStorage.setItem(

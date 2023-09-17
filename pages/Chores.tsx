@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AssignedChore, CompletionStatus } from '../types/backend';
+import { AssignedChore } from '../types/backend';
 import { Button } from 'react-native-paper';
 import axios from 'axios';
 
@@ -113,7 +113,7 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
     const fetchChores = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/list/${household}`);
+        const res = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/list/${household}`);
         let tempChores = res.data;
         if (user) {
           tempChores = tempChores.filter(chore => chore.accountId === user)
@@ -154,7 +154,7 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
   };
 
   const completeTask = async (id: string) => {
-    const res = await axios.patch(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/${id}/complete`);
+    const res = await axios.patch(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/${id}/complete`);
     if (res) {
       setRefetch(true);
     }

@@ -19,7 +19,7 @@ const Bills = ({ user, household }: IBills) => {
     const month = new Date().toLocaleString('default', { month: 'long' });
 
     const createTransaction = async () => {
-        const res = await axios.put('https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/financial-transaction', {
+        const res = await axios.put(`${process.env.EXPO_PUBLIC_API_URL}/api/financial-transaction`, {
             amount: Number.parseFloat(cost),
             description: "",
             name: title,
@@ -52,9 +52,8 @@ const Bills = ({ user, household }: IBills) => {
 
     useEffect(() => {
         const getSummary = async () => {
-            const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/spend-information/household/${household}/account/${user}`)
+            const res = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/spend-information/household/${household}/account/${user}`)
             if (res.data) {
-                console.log(res.data)
                 setSummary(res.data)
             }
         }

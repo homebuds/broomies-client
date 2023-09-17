@@ -170,7 +170,7 @@ const AddChores = ({ refetch }: IAddChores) => {
                     parsedDays.push(index + 1);
                 }
             })
-            const res = await axios.post('https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/chore', {
+            const res = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/api/chore`, {
                 name: title,
                 description: description,
                 householdId: household,
