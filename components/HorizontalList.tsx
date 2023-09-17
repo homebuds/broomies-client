@@ -15,12 +15,24 @@ const styles = StyleSheet.create({
     },
     listItem: {
         padding: 16,
+        paddingTop: 21,
+        paddingBottom: 21,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
         backgroundColor: '#ffffff',
         marginBottom: 8,
         borderRadius: 20,
         height: "100%",
         width: 160,
         boxShadow: "1px 4px 15px 2px rgba(0,0,0,0.66)"
+    },
+    backgroundCompleted: {
+        backgroundColor: "#F4FFE5",
+    },
+    backgroundInProgress: {
+        backgroundColor: "#FFFDEA",
     },
     listItemShadow: {
         shadowColor: '#212121',
@@ -36,8 +48,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignContent: 'center',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
+        columnGap: 2,
     },
     redCircle: {
         width: 10,
@@ -49,7 +60,13 @@ const styles = StyleSheet.create({
         width: 10,
         height: 10,
         borderRadius: 25,
-        backgroundColor: 'green',
+        backgroundColor: '#B9EAB3',
+    },
+    yellowCircle: {
+        width: 10,
+        height: 10,
+        borderRadius: 25,
+        backgroundColor: '#EDEA9B',
     },
     flatListContainer: {
         maxHeight: "80%",
@@ -62,16 +79,18 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         margin: 20,
         marginTop: 8
+    },
+    listItemTitle: {
+        fontSize: 15,
+        fontWeight: "700",
+    },
+    listItemIcon: {
+        fontSize: 80
     }
 });
 
-interface IHorizontalList {
-    items: AssignedChore[];
-}
 
-const HorizontalList = ({ items }: IHorizontalList) => {
-
-
+const HorizontalList = ({ items }) => {
     return (
         <View style={[styles.container, styles.listItemShadow]}>
             <Text style={styles.title}>My Chores</Text>
@@ -82,20 +101,23 @@ const HorizontalList = ({ items }: IHorizontalList) => {
                 keyExtractor={({ id }) => id}
                 ItemSeparatorComponent={() => <View style={{ width: 25 }} />}
                 renderItem={({ item }) => (
-                    <View style={[styles.listItem, styles.listItemShadow]}>
-                        <Text>{item.choreName}</Text>
+                    <View style={[styles.listItem, styles.listItemShadow, item?.completed ? styles.backgroundCompleted : styles.backgroundInProgress]}>
+                        <Text style={styles.listItemTitle}>{item.name}</Text>
+                        <Text style={styles.listItemIcon}>{item.icon}</Text>
                         <View style={styles.listSubOptions}>
-                            <Text>{item.firstName} {item.lastName}</Text>
+                            <Text>{item.completed ? "Complete" : "In progress"}</Text>
                             {item.completed ? (
-                                <View style={styles.greenCircle}></View>
+                                <View style={styles.greenCircle}>
+                                </View>
                             ) : (
-                                <View style={styles.redCircle}></View>
+                                <View style={styles.yellowCircle}></View>
                             )}
                         </View>
                     </View>
-                )}
+                )
+                }
             />
-        </View>
+        </View >
     );
 };
 

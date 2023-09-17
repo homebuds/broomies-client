@@ -33,7 +33,7 @@ const HomeHeader: React.FC<HeaderProps> = ({ title, user }) => {
         });
     }, [user]);
 
-    return (
+  return (
     <View style={styles.header}>
         <View style={styles.headerUserInfo} >
             <Image style={styles.headerImage} source={loading ? {uri: require("../icons/emptyPic.png")} : {uri: data?.pictureUrl as string }} />

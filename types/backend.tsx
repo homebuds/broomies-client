@@ -4,10 +4,10 @@ export type AssignedChore = {
     id: string;
     choreId: string;
     accountId: string;
-    date: Date;
+    dueDate: string;
     completed: boolean;
-    choreDescription?: string;
-    choreName?: string;
+    description?: string;
+    name?: string;
     firstName?: string;
     lastName?: string;
     photo?: string;

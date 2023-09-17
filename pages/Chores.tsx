@@ -102,7 +102,7 @@ interface IChores {
 const Chores = ({ user, refetch, setRefetch }: IChores) => {
   const [isLoading, setLoading] = useState(true);
   const [household, setHousehold] = useState('');
-  const [data, setData] = useState<AssignedChore[]>([]);
+  const [data, setData] = useState<{ [key: string]: AssignedChore[] }>({});
 
   const getChores = async () => {
     const fetchChores = async () => {
@@ -113,7 +113,7 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
         if (user) {
           tempChores = tempChores.filter(chore => chore.accountId === user)
         }
-        setData(tempChores.map(chore => {
+        setData(groupChoresByDay(tempChores.map(chore => {
           return {
             ...chore.chore,
             ...chore.account,
@@ -122,13 +122,30 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
             accountId: chore.accountId,
             completed: chore?.completed
           }
-        }).sort((a, b) => Date.parse(a.dueDate) - Date.parse(b.dueDate)));
+        }).sort((a, b) => Date.parse(a.dueDate) - Date.parse(b.dueDate))));
       } catch (e) {
         console.log(e)
       }
       setLoading(false);
     }
     fetchChores();
+  };
+
+  const groupChoresByDay = (chores: AssignedChore[]) => {
+    const choresByDay: { [key: string]: AssignedChore[] } = {};
+
+    chores.forEach((chore) => {
+      const date = new Date(chore.dueDate);
+      const day = date.toLocaleString('default', { weekday: 'long' }); // Gives "Monday", "Tuesday", etc.
+
+      if (!choresByDay[day]) {
+        choresByDay[day] = [];
+      }
+
+      choresByDay[day].push(chore);
+    });
+
+    return choresByDay;
   };
 
   const completeTask = async (id: string) => {
@@ -181,33 +198,37 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
       ) : (
         <FlatList
           style={styles.flatListContainer}
-          data={data}
-          keyExtractor={({ id }) => id}
+          data={Object.keys(data)}
+          keyExtractor={(day) => day}
           ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
-          renderItem={({ item }) => {
-            return <View key={item.id} style={[styles.listItemShadow, item.completed ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.listItemDescription}>{getDate(item.dueDate)}</Text>
-                <Text style={styles.listItemTitle}>{item.name}</Text>
-                <Text style={styles.listItemDescription}>{item.description}</Text>
-                <View style={styles.listSubOptions}>
-                  <Text>{`${item.completed ? "Complete" : "In Progress"}`}</Text>
-                  <View style={item.completed ? styles.greenCircle : styles.yellowCircle}></View>
-                </View>
-              </View>
-              {user === item.accountId ? <View style={styles.listItemAvatar}>
-                <TouchableOpacity disabled={item.completed} style={styles.listItemImage} onPress={() => completeTask(item.id)}>
-                  {<Image style={styles.listItemImage} source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/1024px-Eo_circle_green_checkmark.svg.png' }} />
+          renderItem={({ item: day }) => {
+            return (<View>
+              <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>{day.split(', ')[0]}, {day.split(', ')[1]}</Text>
+              {data[day].map((item) => (
+                <View key={item.id} style={[styles.listItemShadow, item.completed ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.listItemDescription}>{getDate(item.dueDate)}</Text>
+                    <Text style={styles.listItemTitle}>{item.name}</Text>
+                    <Text style={styles.listItemDescription}>{item.description}</Text>
+                    <View style={styles.listSubOptions}>
+                      <Text>{`${item.completed ? "Complete" : "In Progress"}`}</Text>
+                      <View style={item.completed ? styles.greenCircle : styles.yellowCircle}></View>
+                    </View>
+                  </View>
+                  {user === item.accountId ? <View style={styles.listItemAvatar}>
+                    <TouchableOpacity disabled={item.completed} style={styles.listItemImage} onPress={() => completeTask(item.id)}>
+                      {<Image style={styles.listItemImage} source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/1024px-Eo_circle_green_checkmark.svg.png' }} />
+                      }
+                    </TouchableOpacity>
+                    <Text style={styles.listItemDescription}>Mark as Completed</Text>
+                  </View> :
+                    <View style={styles.listItemAvatar}>
+                      <Image style={styles.listItemImage} source={{ uri: item?.pictureUrl as string }} />
+                      <Text style={styles.listItemDescription}>{item?.firstName}</Text>
+                    </View>
                   }
-                </TouchableOpacity>
-                <Text style={styles.listItemDescription}>Mark as Completed</Text>
-              </View> :
-                <View style={styles.listItemAvatar}>
-                  <Image style={styles.listItemImage} source={{ uri: item?.pictureUrl as string }} />
-                  <Text style={styles.listItemDescription}>{item?.firstName}</Text>
-                </View>
-              }
-            </View>
+                </View>))}
+            </View>)
           }}
         />
       )}
