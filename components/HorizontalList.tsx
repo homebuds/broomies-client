@@ -83,6 +83,9 @@ const styles = StyleSheet.create({
     listItemTitle: {
         fontSize: 15,
         fontWeight: "700",
+    },
+    listItemIcon: {
+        fontSize: 80
     }
 });
 
@@ -100,6 +103,7 @@ const HorizontalList = ({ items }) => {
                 renderItem={({ item }) => (
                     <View style={[styles.listItem, styles.listItemShadow, item?.completed ? styles.backgroundCompleted : styles.backgroundInProgress]}>
                         <Text style={styles.listItemTitle}>{item.name}</Text>
+                        <Text style={styles.listItemIcon}>{item.icon}</Text>
                         <View style={styles.listSubOptions}>
                             <Text>{item.completed ? "Complete" : "In progress"}</Text>
                             {item.completed ? (

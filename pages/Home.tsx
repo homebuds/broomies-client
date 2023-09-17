@@ -62,6 +62,9 @@ const Home = ({ user }: IHome) => {
     const [household, setHousehold] = useState('');
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
+    const [max, setMax] = useState();
+    const [placements, setPlacements] = useState([]);
+    // const [placements, setPlacements] = useState([])
 
     const getChores = async () => {
         const fetchChores = async () => {
@@ -90,6 +93,18 @@ const Home = ({ user }: IHome) => {
         fetchChores()
     };
 
+    const getPlacements = async () => {
+        setLoading(true);
+        try {
+            const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/top-roommates/${household}`);
+            let temp = res.data;
+            setPlacements(temp)
+        } catch (e) {
+            console.log(e)
+        }
+        setLoading(false);
+    }
+
     useEffect(() => {
         const getHousehold = async () => {
             try {
@@ -104,12 +119,12 @@ const Home = ({ user }: IHome) => {
         getHousehold();
     }, []);
 
-    const placements = [
-        { id: "1", firstName: 'Dennis', points: 2300, pictureUrl: "https://marketplace.canva.com/EAFewoMXU-4/1/0/1600w/canva-purple-pink-gradient-man-3d-avatar-0o0qE2T_kr8.jpg" },
-        { id: "2", firstName: 'Rus', points: 1900, pictureUrl: "https://blush-design.imgix.net/collections/rChdrB8vX8xQJunpDPp8/v16/Master/Avataaar/cropped/Default.svg?w=500&auto=compress&cs=srgb" },
-        { id: "3", firstName: 'Isaac', points: 1500, pictureUrl: "https://people.com/thmb/84W5-9FnCb0XLaqaoYwHasY5GwI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(216x0:218x2)/robert-pattinson-435-2-3f3472a03106439abee37574a6b8cef7.jpg" },
-        { id: "4", firstName: "Gordon", pictureUrl: "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg", points: 1300 }
-    ];
+    // const placements = [
+    //     { id: "1", firstName: 'Dennis', points: 2300, pictureUrl: "https://marketplace.canva.com/EAFewoMXU-4/1/0/1600w/canva-purple-pink-gradient-man-3d-avatar-0o0qE2T_kr8.jpg" },
+    //     { id: "2", firstName: 'Rus', points: 1900, pictureUrl: "https://blush-design.imgix.net/collections/rChdrB8vX8xQJunpDPp8/v16/Master/Avataaar/cropped/Default.svg?w=500&auto=compress&cs=srgb" },
+    //     { id: "3", firstName: 'Isaac', points: 1500, pictureUrl: "https://people.com/thmb/84W5-9FnCb0XLaqaoYwHasY5GwI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(216x0:218x2)/robert-pattinson-435-2-3f3472a03106439abee37574a6b8cef7.jpg" },
+    //     { id: "4", firstName: "Gordon", pictureUrl: "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg", points: 1300 }
+    // ];
 
     const colors = [
         "#C0F1C9",
@@ -118,17 +133,23 @@ const Home = ({ user }: IHome) => {
         "#C2EAFC"
     ]
 
-    const max = placements.reduce(function (prev, current) {
-        return (prev && prev.points > current.points) ? prev : current
-    }) //returns object
-
     // Render the vertical bar chart
     useEffect(() => {
         if (household) {
             getChores();
+            getPlacements();
         }
     }, [household]);
 
+    useEffect(() => {
+        if (placements.length) {
+            setMax(placements.reduce(function (prev, current) {
+                return (prev && prev.points > current.points) ? prev : current
+            }))
+        }
+    }, [placements]);
+
+    console.log(placements);
     return (
         <View style={styles.container}>
             {isLoading ? (
@@ -140,13 +161,13 @@ const Home = ({ user }: IHome) => {
                         {
                             placements.map((placement, index) =>
                                 <View key={index} style={{ display: "flex", flex: 1, flexDirection: "column", alignItems: "center", rowGap: 5, marginBottom: -25, maxWidth: 70 }}>
-                                    {placement.id === max.id && <Text style={styles.listItemCrown}>👑</Text>}
+                                    {placement?.id === max?.id && <Text style={styles.listItemCrown}>👑</Text>}
                                     <Image style={styles.listItemImage} source={{ uri: placement?.pictureUrl as string }} />
                                     <Text style={{
                                         fontSize: 20,
                                         fontWeight: "600"
                                     }}>{placement.points}</Text>
-                                    <View style={{ width: "100%", height: `${(placement.points / max.points) * 50}%`, backgroundColor: colors[index], borderTopLeftRadius: 20, borderTopEndRadius: 20 }} />
+                                    <View style={{ width: "100%", height: `${(placement.points / max?.points) * 50}%`, backgroundColor: colors[index], borderTopLeftRadius: 20, borderTopEndRadius: 20 }} />
                                 </View>
                             )
                         }
