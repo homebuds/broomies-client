@@ -26,7 +26,7 @@ const Footer: React.FC<BottomTabBarProps> = (props) => {
             shadowOpacity: 0.2,
             shadowRadius: 11,
             borderTopLeftRadius: 20,
-        borderTopEndRadius: 20,
+            borderTopEndRadius: 20,
         }}>
             {/* Render the default tab bar */}
             <View style={{ display: "flex", flexDirection: 'row', alignItems: 'center', flex: 1, width: "100%" }}>
