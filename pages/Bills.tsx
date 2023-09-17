@@ -1,260 +1,230 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View, StyleSheet } from 'react-native';
-
-type AssignedChore = {
-    id: string;
-    choreId: string;
-    accountId: string;
-    date: Date;
-    completed: boolean;
-    choreDescription?: string;
-    choreName?: string;
-    firstName?: string;
-    lastName?: string;
-};
-
-type Account = {
-    accountId: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-};
-
-type Chore = {
-    id: string;
-    choreDescription: string;
-    choreName: string;
-};
-
-const chores: Chore[] = [
-    {
-        id: "c1",
-        choreDescription: "Take out the trash",
-        choreName: "Trash Duty",
-    },
-    {
-        id: "c2",
-        choreDescription: "Wash the dishes",
-        choreName: "Dishwashing",
-    },
-    {
-        id: "c3",
-        choreDescription: "Vacuum the living room",
-        choreName: "Vacuum",
-    },
-    {
-        id: "c4",
-        choreDescription: "Clean the bathroom",
-        choreName: "Bathroom Cleanup",
-    },
-];
-
-const assignedChores: AssignedChore[] = [
-    {
-        id: "1",
-        choreId: "c1",
-        accountId: "a1",
-        date: new Date("2023-09-16"),
-        completed: false,
-    },
-    {
-        id: "2",
-        choreId: "c2",
-        accountId: "a1",
-        date: new Date("2023-09-17"),
-        completed: true,
-    },
-    {
-        id: "3",
-        choreId: "c3",
-        accountId: "a2",
-        date: new Date("2023-09-16"),
-        completed: false,
-    },
-    {
-        id: "4",
-        choreId: "c4",
-        accountId: "a2",
-        date: new Date("2023-09-18"),
-        completed: false,
-    },
-    {
-        id: "5",
-        choreId: "c1",
-        accountId: "a3",
-        date: new Date("2023-09-19"),
-        completed: false,
-    },
-    {
-        id: "6",
-        choreId: "c3",
-        accountId: "a4",
-        date: new Date("2023-09-16"),
-        completed: true,
-    },
-    {
-        id: "7",
-        choreId: "c2",
-        accountId: "a3",
-        date: new Date("2023-09-20"),
-        completed: false,
-    },
-    {
-        id: "8",
-        choreId: "c3",
-        accountId: "a4",
-        date: new Date("2023-09-16"),
-        completed: true,
-    },
-    {
-        id: "9",
-        choreId: "c2",
-        accountId: "a3",
-        date: new Date("2023-09-20"),
-        completed: false,
-    },
-    {
-        id: "10",
-        choreId: "c3",
-        accountId: "a4",
-        date: new Date("2023-09-16"),
-        completed: true,
-    },
-    {
-        id: "11",
-        choreId: "c2",
-        accountId: "a3",
-        date: new Date("2023-09-20"),
-        completed: false,
-    },
-];
-
-const accounts: Account[] = [
-    {
-        accountId: "a1",
-        firstName: "John",
-        lastName: "Doe",
-        email: "john.doe@example.com",
-    },
-    {
-        accountId: "a2",
-        firstName: "Jane",
-        lastName: "Doe",
-        email: "jane.doe@example.com",
-    },
-    {
-        accountId: "a3",
-        firstName: "Emily",
-        lastName: "Smith",
-        email: "emily.smith@example.com",
-    },
-    {
-        accountId: "a4",
-        firstName: "Tom",
-        lastName: "Brown",
-        email: "tom.brown@example.com",
-    },
-];
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 24,
-    },
-    listItem: {
-        padding: 16,
-        backgroundColor: '#f9f9f9',
-        marginBottom: 8,
-        borderRadius: 8,
-        width: "100%"
-    },
-    listSubOptions: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignContent: 'center',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-    },
-    redCircle: {
-        width: 10,
-        height: 10,
-        borderRadius: 25,
-        backgroundColor: 'red',
-    },
-    greenCircle: {
-        width: 10,
-        height: 10,
-        borderRadius: 25,
-        backgroundColor: 'green',
-    },
-    flatListContainer: {
-        maxHeight: '100%',
-    }
-});
+import { Alert, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Input, Button } from 'react-native-elements';
+import ArrowDownIcon from '../icons/arrowdown.svg'
+import axios from 'axios';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface IBills {
     user?: string;
+    household?: string;
 }
 
-const Bills = ({ user }: IBills) => {
-    const [isLoading, setLoading] = useState(true);
-    const [data, setData] = useState<AssignedChore[]>([]);
+const Bills = ({ user, household }: IBills) => {
+    const [title, setTitle] = useState("");
+    const [cost, setCost] = useState("");
+    const [summary, setSummary] = useState();
+    const [showDropdown, setShowDropdown] = useState(false);
 
-    const getMovies = async () => {
-        try {
-            let tempChores = assignedChores.map(aChore => {
-                const chore = chores.find(chore => aChore.choreId === chore.id)
-                const account = accounts.find(account => account.accountId === aChore.accountId);
-                return {
-                    ...aChore,
-                    choreDescription: chore?.choreDescription,
-                    choreName: chore?.choreName,
-                    firstName: account?.firstName,
-                    lastName: account?.lastName
-                }
-            });
-            if (user) {
-                tempChores = tempChores.filter(chore => chore.accountId === user)
-            }
-            setData(tempChores);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
+    const month = new Date().toLocaleString('default', { month: 'long' });
+
+    const createTransaction = async () => {
+        const res = await axios.put('https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/financial-transaction', {
+            amount: Number.parseFloat(cost),
+            description: "",
+            name: title,
+            accountId: user,
+            householdId: household
+        })
+        if (res.status == 200) {
+            setTitle("");
+            setCost("");
+            Alert.alert("successfully added transaction!")
         }
+    }
+    const handleAmountChange = (text: string) => {
+        let cleanedText = text.replace(/[^0-9]/g, '');
+
+        // Convert cleaned text to a number and back to a string
+        let cleanedNumber = parseFloat(cleanedText);
+
+        // Handle invalid inputs
+        if (isNaN(cleanedNumber)) {
+            setCost('0.00');
+            return;
+        }
+
+        // Divide by 100 to get currency format
+        let formattedText = (cleanedNumber / 100).toFixed(2);
+
+        setCost(formattedText);
     };
 
     useEffect(() => {
-        getMovies();
-    }, []);
+        const getSummary = async () => {
+            const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/spend-information/household/${household}/account/${user}`)
+            if (res.data) {
+                console.log(res.data)
+                setSummary(res.data)
+            }
+        }
+        getSummary();
+    }, [])
 
-    return (
-        <View style={styles.container}>
-            {isLoading ? (
-                <ActivityIndicator />
-            ) : (
-                <FlatList
-                    style={styles.flatListContainer}
-                    data={data}
-                    keyExtractor={({ id }) => id}
-                    renderItem={({ item }) => (
-                        <View style={styles.listItem}>
-                            <Text>{item.choreName}</Text>
-                            <View style={styles.listSubOptions}>
-                                <Text>{item.firstName} {item.lastName}</Text>
-                                {item.completed ? (
-                                    <View style={styles.greenCircle}></View>
-                                ) : (
-                                    <View style={styles.redCircle}></View>
-                                )}
-                            </View>
-                        </View>
-                    )}
-                />
-            )}
+    return (<View style={styles.container}>
+        <Text style={styles.title}>Since you've last settled...</Text>
+        <View style={[styles.sumContainer, styles.sumContainerShadow]}>
+            <LinearGradient
+                // Background Linear Gradient
+                colors={['rgba(192, 247, 255, 0.30)', ' rgba(192, 255, 195, 0.30)']}
+                style={styles.gradient}
+            >
+                <Text style={styles.sumContainerTitle}>Running Sum</Text>
+                <Text style={styles.sumContainerTotal}>${summary?.totalSpent.toFixed(2)}</Text>
+                <Text style={styles.sumContainerText}>{summary?.amountOwed < 0 ? "You owe your roomies: " : "Your Roomies owe you: "}<Text style={styles.bold}>${Math.abs(summary?.amountOwed.toFixed(2))}</Text></Text>
+                <Text style={styles.sumContainerText}>Performance savings: <Text style={styles.bold}>${summary?.roommatePointsAmount.toFixed(2)}</Text></Text>
+            </LinearGradient>
         </View>
+        <View style={styles.optionsContainer}>
+            <Text style={styles.transactionTitle}>Transactions</Text>
+            <TouchableOpacity onPress={() => setShowDropdown(prev => !prev)}><ArrowDownIcon style={showDropdown ? styles.dropdownIconUp : styles.dropdownIconDown} /></TouchableOpacity>
+        </View>
+        {showDropdown && <View style={styles.dropdownContent}>
+            <View style={styles.inputContainer}>
+                <Input
+                    style={styles.input}
+                    onChangeText={(text) => setTitle(text)}
+                    value={title}
+                    label="Description"
+                    labelStyle={{ color: "black", fontWeight: "400" }}
+                    inputContainerStyle={{ alignSelf: "flex-end", borderBottomWidth: 0, marginBottom: 0 }}
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <Input
+                    style={styles.input}
+                    placeholderTextColor="black"
+                    placeholder="$0.00"
+                    onChangeText={handleAmountChange}
+                    value={cost}
+                    keyboardType="decimal-pad"
+                    label="Cost"
+                    labelStyle={{ color: "black", fontWeight: "400", marginTop: -15 }}
+                    inputContainerStyle={{ borderBottomWidth: 0, marginBottom: 0 }}
+                />
+            </View>
+            <Button
+                style={styles.addButton}
+                title="+ Add new"
+                onPress={() => {
+                    createTransaction();
+                }}
+            /></View>}
+    </View>
     );
 };
+
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 30
+    },
+    sumContainer: {
+        borderRadius: 20,
+        marginBottom: 18,
+    },
+    sumContainerShadow: {
+        shadowColor: 'rgba(0, 0, 0, 0.15)',
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 10,
+    },
+    title: {
+        marginBottom: 8
+    },
+    dropdownContent: {
+        marginTop: 17,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        flexWrap: "wrap",
+    },
+    input: {
+        fontSize: 15,
+        display: "flex",
+        flex: 1,
+        height: 25,
+        borderRadius: 8,
+        borderWidth: 2,
+        borderColor: "#ccc",
+        alignSelf: 'center'
+    },
+    dropdownIconDown: {
+        transform: [{ rotate: '90deg' }]
+    },
+    dropdownIconUp: {
+        transform: [{ rotate: '-90deg' }]
+    },
+    inputContainer: {
+        display: "flex",
+        flexDirection: "row",
+        columnGap: 18,
+        justifyContent: "flex-end",
+        alignItems: 'center'
+    },
+    gradient: {
+        padding: 25,
+        borderRadius: 20,
+    },
+    optionsContainer: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    bold: {
+        fontWeight: "600"
+    },
+    sumContainerTitle: {
+        fontSize: 20,
+        fontWeight: "500",
+        marginBottom: 12,
+    },
+    transactionTitle: {
+        fontSize: 20,
+        fontWeight: "600"
+    },
+    sumContainerTotal: {
+        fontSize: 35,
+        fontWeight: "600",
+        marginBottom: 22,
+    },
+    sumContainerText: {
+        fontSize: 15,
+        fontWeight: "400",
+        marginBottom: 2
+    },
+    addButton: {
+        width: 165,
+        alignSelf: "center",
+        borderRadius: 20,
+        overflow: "hidden",
+        fontSize: 20,
+        fontWeight: 700
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+});
 
 export default Bills;

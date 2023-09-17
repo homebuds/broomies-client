@@ -87,7 +87,7 @@ const App = () => {
                 }
               }} children={(props) => <Home {...props} user={user} />} />
               <Tab.Screen name="Chores" children={(props) => <CustomChoresTab {...props} user={user} />} />
-              <Tab.Screen name="Bills" component={Bills} />
+              <Tab.Screen name="Bills" children={(props) => <Bills {...props} user={user} household={household} />} />
               <Tab.Screen name="Log Out" children={(props) => <SignOut {...props} refetch={retrieveUser} />} />
             </Tab.Navigator>
             : <Stack.Navigator>
