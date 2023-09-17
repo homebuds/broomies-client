@@ -76,8 +76,9 @@ const styles = StyleSheet.create({
   },
   headerName: {
     fontSize: 15,
-    color: 'black', // Text color
+    color: 'black',
     marginRight: 'auto',
+    fontWeight: "bold",
   },
   headerImage: {
     width: 41,
