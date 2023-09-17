@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import HomeIcon from '../icons/home.svg'
+import HomeDarkIcon from '../icons/homedark.svg'
 import BroomIcon from '../icons/broom.svg'
 import MoneyIcon from '../icons/money.svg'
 import SignOutIcon from '../icons/signout.svg'
@@ -9,7 +10,6 @@ const Footer: React.FC<BottomTabBarProps> = (props) => {
     const { state, navigation } = props;
     return (
         <View style={{
-            boxShadow: "3px 3px 10px 0px rgba(0, 0, 0, 0.85)",
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',

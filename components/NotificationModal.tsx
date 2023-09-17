@@ -21,9 +21,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
   pictureUrl
 }) => {
 
-    console.log(pictureUrl)
-
-    return (
+  return (
     <Modal
       animationType="slide"
       transparent={true}
@@ -42,7 +40,7 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
           <View style={styles.notificationList}>
             {/* Need to add way to get user image for diff users instead of only using 1 image */}
             {notifications.map((notification, index) => (
-                <NotificationCard status={'complete'} picture={pictureUrl}/>
+              <NotificationCard status={'complete'} picture={pictureUrl} />
             ))}
           </View>
         </View>
@@ -99,7 +97,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold'
   },
-  
+
 });
 
 export default NotificationsModal;

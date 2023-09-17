@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Switch, FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AssignedChore, CompletionStatus } from '../types/backend';
-import { Button } from 'react-native-paper';
+import { AssignedChore } from '../types/backend';
 import axios from 'axios';
+import ChoreCard from '../components/ChoreCard';
 
 const styles = StyleSheet.create({
   container: {
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   listItemDescription: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "400",
     flex: 1
   },
@@ -90,6 +90,11 @@ const styles = StyleSheet.create({
   flatListContainer: {
     maxHeight: '100%',
     padding: 15
+  },
+  headerContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: 'space-between'
   }
 });
 
@@ -108,12 +113,12 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
     const fetchChores = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/list/${household}`);
+        const res = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/list/${household}`);
         let tempChores = res.data;
         if (user) {
-          tempChores = tempChores.filter(chore => chore.accountId === user)
+          tempChores = tempChores.filter((chore: AssignedChore) => chore.accountId === user)
         }
-        setData(groupChoresByDay(tempChores.map(chore => {
+        setData(groupChoresByDay(tempChores.map((chore: any) => {
           return {
             ...chore.chore,
             ...chore.account,
@@ -122,7 +127,7 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
             accountId: chore.accountId,
             completed: chore?.completed
           }
-        }).sort((a, b) => Date.parse(a.dueDate) - Date.parse(b.dueDate))));
+        }).sort((a: AssignedChore, b: AssignedChore) => Date.parse(a.dueDate) - Date.parse(b.dueDate))));
       } catch (e) {
         console.log(e)
       }
@@ -149,7 +154,8 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
   };
 
   const completeTask = async (id: string) => {
-    const res = await axios.patch(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/assigned-chore/${id}/complete`);
+    const res = await axios.patch(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/${id}/complete`);
+
     if (res) {
       setRefetch(true);
     }
@@ -203,31 +209,11 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
           ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
           renderItem={({ item: day }) => {
             return (<View>
-              <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>{day.split(', ')[0]}, {day.split(', ')[1]}</Text>
-              {data[day].map((item) => (
-                <View key={item.id} style={[styles.listItemShadow, item.completed ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.listItemDescription}>{getDate(item.dueDate)}</Text>
-                    <Text style={styles.listItemTitle}>{item.name}</Text>
-                    <Text style={styles.listItemDescription}>{item.description}</Text>
-                    <View style={styles.listSubOptions}>
-                      <Text>{`${item.completed ? "Complete" : "In Progress"}`}</Text>
-                      <View style={item.completed ? styles.greenCircle : styles.yellowCircle}></View>
-                    </View>
-                  </View>
-                  {user === item.accountId ? <View style={styles.listItemAvatar}>
-                    <TouchableOpacity disabled={item.completed} style={styles.listItemImage} onPress={() => completeTask(item.id)}>
-                      {<Image style={styles.listItemImage} source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/1024px-Eo_circle_green_checkmark.svg.png' }} />
-                      }
-                    </TouchableOpacity>
-                    <Text style={styles.listItemDescription}>Mark as Completed</Text>
-                  </View> :
-                    <View style={styles.listItemAvatar}>
-                      <Image style={styles.listItemImage} source={{ uri: item?.pictureUrl as string }} />
-                      <Text style={styles.listItemDescription}>{item?.firstName}</Text>
-                    </View>
-                  }
-                </View>))}
+              <View style={styles.headerContainer}>
+                <Text style={{ fontSize: 18, fontWeight: '500', marginBottom: 12 }}>{day.split(', ')[0]}</Text><Text style={{ fontSize: 15, fontWeight: '400' }}>{day.split(', ')[1]}</Text>
+              </View>
+              {data[day].map((item, index) => (
+                <ChoreCard key={index} item={item} user={user as string} completeTask={completeTask} />))}
             </View>)
           }}
         />
@@ -237,3 +223,5 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
 };
 
 export default Chores;
+
+

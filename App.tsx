@@ -3,29 +3,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator } from 'react-native-paper';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Footer from './components/Footer';
 import {
-  SafeAreaProvider,
-  useSafeAreaInsets
+  SafeAreaProvider
 } from 'react-native-safe-area-context';
 import CustomChoresTab from './components/CustomChoresTab';
-import HomeIcon from './icons/home.svg';
 import SignIn from './pages/SignIn';
 import SignOut from './pages/SignOut';
 import Home from './pages/Home';
 import Bills from './pages/Bills';
-import { View } from 'react-native';
 import HomeHeader from './components/CustomHomeHeader';
-import { User } from './types/backend';
-
-const ChoresTab = createMaterialTopTabNavigator();
 
 const Stack = createNativeStackNavigator();
 
 const Tab = createBottomTabNavigator();
-const ChoresStack = createNativeStackNavigator();
 
 const MyTheme = {
   ...DefaultTheme,
@@ -75,7 +68,7 @@ const App = () => {
           {user ?
             <Tab.Navigator screenOptions={{
               headerStyle: {
-                backgroundColor: '#ECF0EB',
+                backgroundColor: '#ffffff'
               }, headerShown: true
             }} tabBar={(props) => <Footer {...props} />}>
               <Tab.Screen name="Home" component={Home} options={{
@@ -86,7 +79,15 @@ const App = () => {
                   backgroundColor: '#ECF0EB'
                 }
               }} />
-              <Tab.Screen name="Chores" children={(props) => <CustomChoresTab {...props} user={user} />} />
+              <Tab.Screen name="Chores" options={{
+                headerTitle: () => <View />, headerStyle: {
+                  elevation: 0,
+                  shadowOpacity: 0,
+                  borderBottomWidth: 0,
+                  height: 55,
+                  backgroundColor: '#ffffff'
+                }
+              }} children={(props) => <CustomChoresTab {...props} user={user} />} />
               <Tab.Screen name="Bills" children={(props) => <Bills {...props} user={user} household={household} />} />
               <Tab.Screen name="Log Out" children={(props) => <SignOut {...props} refetch={retrieveUser} />} />
             </Tab.Navigator>
@@ -95,7 +96,7 @@ const App = () => {
             </Stack.Navigator>}
         </NavigationContainer>
       }
-    </SafeAreaProvider>
+    </SafeAreaProvider >
   );
 };
 

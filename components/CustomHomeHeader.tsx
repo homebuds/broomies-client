@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, Dimensions } from 'react-native';
-import { accounts, chores } from '../testdata';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import { Account } from '../types/backend';
 import NotificationsModal from './NotificationModal';
+import { Account } from '../types/backend';
 
 interface HeaderProps {
   title: string;
@@ -12,43 +11,41 @@ interface HeaderProps {
 
 const HomeHeader: React.FC<HeaderProps> = ({ title, user }) => {
 
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [isModalOpen, setIsModalOpen] = useState(false)
+  const [data, setData] = useState<Account | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-    useEffect(() => {
-        // Define the API endpoint
-        const apiUrl = `https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/account/${user}`;
+  useEffect(() => {
+    // Define the API endpoint
+    const apiUrl = `${process.env.EXPO_PUBLIC_API_URL}/api/account/${user}`;
 
-        // Make a GET request to the API
-        axios.get(apiUrl)
-        .then(response => {
-            setData(response.data);
-            setLoading(false);
-            console.log(response.data)
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            setLoading(false);
-        });
-    }, [user]);
+    // Make a GET request to the API
+    axios.get(apiUrl)
+      .then(response => {
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  }, [user]);
 
   return (
     <View style={styles.header}>
-        <View style={styles.headerUserInfo} >
-            <Image style={styles.headerImage} source={loading ? {uri: require("../icons/emptyPic.png")} : {uri: data?.pictureUrl as string }} />
-
-            <View>
-                <Text style={styles.headerMessage}>Welcome back!👋</Text>
-                <Text style={styles.headerName}>{loading ? '' : data?.firstName}</Text>
-            </View>
-        </View>
+      <View style={styles.headerUserInfo} >
+        <Image style={styles.headerImage} source={loading ? require("../icons/emptyPic.png") : { uri: data?.pictureUrl as string }} />
         <View>
-            <TouchableOpacity onPress={() => setIsModalOpen(true)}>
-                <Image style={styles.headerImage} source={require('../icons/Notification.png')} />
-            </TouchableOpacity>
+          <Text style={styles.headerMessage}>Welcome back!👋</Text>
+          <Text style={styles.headerName}>{loading ? '' : data?.firstName}</Text>
         </View>
-        <NotificationsModal pictureUrl={data?.pictureUrl} title={"hihi"} notifications={[]} isVisible={isModalOpen} onClose={() => setIsModalOpen(false)}/>
+      </View>
+      <View>
+        <TouchableOpacity onPress={() => setIsModalOpen(true)}>
+          <Image style={styles.headerImage} source={require('../icons/Notification.png')} />
+        </TouchableOpacity>
+      </View>
+      <NotificationsModal pictureUrl={data?.pictureUrl} title={"hihi"} notifications={[]} isVisible={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </View>
   );
 };

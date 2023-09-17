@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View, StyleSheet } from 'react-native';
+import React from 'react';
+import { FlatList, Text, View, StyleSheet } from 'react-native';
 import { AssignedChore } from '../types/backend';
 const styles = StyleSheet.create({
     container: {
@@ -89,8 +89,11 @@ const styles = StyleSheet.create({
     }
 });
 
+interface IHorizontalList {
+    items: AssignedChore[]
+}
 
-const HorizontalList = ({ items }) => {
+const HorizontalList = ({ items }: IHorizontalList) => {
     return (
         <View style={[styles.container, styles.listItemShadow]}>
             <Text style={styles.title}>My Chores</Text>

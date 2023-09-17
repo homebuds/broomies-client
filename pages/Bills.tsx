@@ -5,6 +5,7 @@ import ArrowDownIcon from '../icons/arrowdown.svg'
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import TransactionCard from '../components/TransactionsCard';
+import { Summary } from '../types/backend';
 
 interface IBills {
     user?: string;
@@ -14,14 +15,12 @@ interface IBills {
 const Bills = ({ user, household }: IBills) => {
     const [title, setTitle] = useState("");
     const [cost, setCost] = useState("");
-    const [summary, setSummary] = useState();
+    const [summary, setSummary] = useState<Summary>();
     const [showDropdown, setShowDropdown] = useState(false);
     const [transactionHistory, setTransactionHistory] = useState([])
 
-    const month = new Date().toLocaleString('default', { month: 'long' });
-
     const createTransaction = async () => {
-        const res = await axios.put('https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/financial-transaction', {
+        const res = await axios.put(`${process.env.EXPO_PUBLIC_API_URL}/api/financial-transaction`, {
             amount: Number.parseFloat(cost),
             description: "",
             name: title,
@@ -54,7 +53,7 @@ const Bills = ({ user, household }: IBills) => {
 
     useEffect(() => {
         const getSummary = async () => {
-            const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/spend-information/household/${household}/account/${user}`)
+            const res = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/spend-information/household/${household}/account/${user}`)
             if (res.data) {
                 setSummary(res.data)
             }
@@ -74,7 +73,7 @@ const Bills = ({ user, household }: IBills) => {
 
     return (<View style={styles.container}>
         <Text style={styles.title}>Since you've last settled...</Text>
-        <View style={[styles.sumContainer, styles.sumContainerShadow]}>
+        {summary && <View style={[styles.sumContainer, styles.sumContainerShadow]}>
             <LinearGradient
                 // Background Linear Gradient
                 colors={['rgba(192, 247, 255, 0.30)', ' rgba(192, 255, 195, 0.30)']}
@@ -82,10 +81,10 @@ const Bills = ({ user, household }: IBills) => {
             >
                 <Text style={styles.sumContainerTitle}>Running Sum</Text>
                 <Text style={styles.sumContainerTotal}>${summary?.totalSpent.toFixed(2)}</Text>
-                <Text style={styles.sumContainerText}>{summary?.amountOwed < 0 ? "You owe your roomies: " : "Your Roomies owe you: "}<Text style={styles.bold}>${Math.abs(summary?.amountOwed.toFixed(2))}</Text></Text>
+                <Text style={styles.sumContainerText}>{summary?.amountOwed < 0 ? "You owe your roomies: " : "Your Roomies owe you: "}<Text style={styles.bold}>${Math.abs(summary?.amountOwed || 0).toFixed(2)}</Text></Text>
                 <Text style={styles.sumContainerText}>Performance savings: <Text style={styles.bold}>${summary?.roommatePointsAmount.toFixed(2)}</Text></Text>
             </LinearGradient>
-        </View>
+        </View>}
         <View style={styles.optionsContainer}>
             <Text style={styles.transactionTitle}>Transactions</Text>
             <TouchableOpacity onPress={() => setShowDropdown(prev => !prev)}><ArrowDownIcon style={showDropdown ? styles.dropdownIconUp : styles.dropdownIconDown} />
