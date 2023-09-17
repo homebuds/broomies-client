@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   listItemDescription: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "400",
     flex: 1
   },
@@ -90,6 +90,11 @@ const styles = StyleSheet.create({
   flatListContainer: {
     maxHeight: '100%',
     padding: 15
+  },
+  headerContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: 'space-between'
   }
 });
 
@@ -203,11 +208,12 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
           ItemSeparatorComponent={() => <View style={{ height: 25 }} />}
           renderItem={({ item: day }) => {
             return (<View>
-              <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>{day.split(', ')[0]}, {day.split(', ')[1]}</Text>
+              <View style={styles.headerContainer}>
+                <Text style={{ fontSize: 18, fontWeight: '500', marginBottom: 12 }}>{day.split(', ')[0]}</Text><Text style={{ fontSize: 15, fontWeight: '400' }}>{day.split(', ')[1]}</Text>
+              </View>
               {data[day].map((item) => (
                 <View key={item.id} style={[styles.listItemShadow, item.completed ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
                   <View style={{ flex: 1 }}>
-                    <Text style={styles.listItemDescription}>{getDate(item.dueDate)}</Text>
                     <Text style={styles.listItemTitle}>{item.name}</Text>
                     <Text style={styles.listItemDescription}>{item.description}</Text>
                     <View style={styles.listSubOptions}>
