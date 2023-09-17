@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Switch, FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AssignedChore } from '../types/backend';
-import { Button } from 'react-native-paper';
 import axios from 'axios';
+import ChoreCard from '../components/ChoreCard';
 
 const styles = StyleSheet.create({
   container: {
@@ -155,6 +155,7 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
 
   const completeTask = async (id: string) => {
     const res = await axios.patch(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/${id}/complete`);
+
     if (res) {
       setRefetch(true);
     }
@@ -212,28 +213,7 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
                 <Text style={{ fontSize: 18, fontWeight: '500', marginBottom: 12 }}>{day.split(', ')[0]}</Text><Text style={{ fontSize: 15, fontWeight: '400' }}>{day.split(', ')[1]}</Text>
               </View>
               {data[day].map((item) => (
-                <View key={item.id} style={[styles.listItemShadow, item.completed ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.listItemTitle}>{item.name}</Text>
-                    <Text style={styles.listItemDescription}>{item.description}</Text>
-                    <View style={styles.listSubOptions}>
-                      <Text>{`${item.completed ? "Complete" : "In Progress"}`}</Text>
-                      <View style={item.completed ? styles.greenCircle : styles.yellowCircle}></View>
-                    </View>
-                  </View>
-                  {user === item.accountId ? <View style={styles.listItemAvatar}>
-                    <TouchableOpacity disabled={item.completed} style={styles.listItemImage} onPress={() => completeTask(item.id)}>
-                      {<Image style={styles.listItemImage} source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/1024px-Eo_circle_green_checkmark.svg.png' }} />
-                      }
-                    </TouchableOpacity>
-                    <Text style={styles.listItemDescription}>Mark as Completed</Text>
-                  </View> :
-                    <View style={styles.listItemAvatar}>
-                      <Image style={styles.listItemImage} source={{ uri: item?.pictureUrl as string }} />
-                      <Text style={styles.listItemDescription}>{item?.firstName}</Text>
-                    </View>
-                  }
-                </View>))}
+                <ChoreCard item={item} user={user} completeTask={completeTask} />))}
             </View>)
           }}
         />
@@ -243,3 +223,5 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
 };
 
 export default Chores;
+
+
