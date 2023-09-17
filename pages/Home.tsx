@@ -176,7 +176,7 @@ const Home = ({ user }: IHome) => {
                             placements.map((placement, index) =>
                                 <View key={index} style={{ display: "flex", flex: 1, flexDirection: "column", alignItems: "center", rowGap: 5, marginBottom: -25, maxWidth: 70 }}>
                                     {placement?.id === max?.id && <Text style={styles.listItemCrown}>👑</Text>}
-                                    <Image style={styles.listItemImage} source={{ uri: placement?.pictureUrl as string }} />
+                                    <Image style={styles.listItemImage} source={{ uri: placement?.account?.pictureUrl as string }} />
                                     <Text style={{
                                         fontSize: 20,
                                         fontWeight: "600"
