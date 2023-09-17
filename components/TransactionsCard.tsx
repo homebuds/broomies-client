@@ -48,7 +48,7 @@ const TransactionCard = (props: ITransactionCard) => {
 
     return (
         <View style={styles.container}>
-            <Image style={styles.image} source={data ? { uri: data.pictureUrl as string } : { uri: require("../icons/emptyPic.png") }} />
+            <Image style={styles.image} source={data ? { uri: data.pictureUrl as string } : require("../icons/emptyPic.png")} />
             <View style={styles.textCol}>
                 <Text style={styles.textName}>{data?.firstName ?? ''} </Text>
                 <Text style={styles.textAction}>{description}</Text>
