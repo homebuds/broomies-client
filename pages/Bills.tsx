@@ -4,6 +4,7 @@ import { Input, Button } from 'react-native-elements';
 import ArrowDownIcon from '../icons/arrowdown.svg'
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
+import TransactionCard from '../components/TransactionsCard';
 import { Summary } from '../types/backend';
 
 interface IBills {
@@ -16,6 +17,7 @@ const Bills = ({ user, household }: IBills) => {
     const [cost, setCost] = useState("");
     const [summary, setSummary] = useState<Summary>();
     const [showDropdown, setShowDropdown] = useState(false);
+    const [transactionHistory, setTransactionHistory] = useState([])
 
     const createTransaction = async () => {
         const res = await axios.put(`${process.env.EXPO_PUBLIC_API_URL}/api/financial-transaction`, {
@@ -59,6 +61,16 @@ const Bills = ({ user, household }: IBills) => {
         getSummary();
     }, [])
 
+    useEffect(() => {
+        const getHistory = async () => {
+            const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/financial-transaction/list/${household}/${user}`)
+            if (res.data) {
+                setTransactionHistory(res.data)
+            }
+        }
+        getHistory();
+    }, [])
+
     return (<View style={styles.container}>
         <Text style={styles.title}>Since you've last settled...</Text>
         {summary && <View style={[styles.sumContainer, styles.sumContainerShadow]}>
@@ -75,7 +87,9 @@ const Bills = ({ user, household }: IBills) => {
         </View>}
         <View style={styles.optionsContainer}>
             <Text style={styles.transactionTitle}>Transactions</Text>
-            <TouchableOpacity onPress={() => setShowDropdown(prev => !prev)}><ArrowDownIcon style={showDropdown ? styles.dropdownIconUp : styles.dropdownIconDown} /></TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowDropdown(prev => !prev)}><ArrowDownIcon style={showDropdown ? styles.dropdownIconUp : styles.dropdownIconDown} />
+            
+            </TouchableOpacity>
         </View>
         {showDropdown && <View style={styles.dropdownContent}>
             <View style={styles.inputContainer}>
@@ -108,6 +122,11 @@ const Bills = ({ user, household }: IBills) => {
                     createTransaction();
                 }}
             /></View>}
+
+            {transactionHistory.map((transaction) => {
+                console.log(transaction.owed)
+                return <TransactionCard owed={transaction.owed} user={transaction.accountId} description={transaction.name}/>
+            })}
     </View>
     );
 };
