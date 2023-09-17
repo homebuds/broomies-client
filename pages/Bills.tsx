@@ -6,6 +6,7 @@ import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import TransactionCard from '../components/TransactionsCard';
 import { Summary } from '../types/backend';
+import { Transaction } from '../types/backend';
 
 interface IBills {
     user?: string;
@@ -123,8 +124,8 @@ const Bills = ({ user, household }: IBills) => {
                 }}
             /></View>}
 
-        {transactionHistory.map((transaction) => {
-            return <TransactionCard owed={transaction.owed} user={transaction.accountId} description={transaction.name} />
+        {transactionHistory.map((transaction: Transaction, index) => {
+            return <TransactionCard key={index} owed={transaction.owed} user={transaction.accountId} description={transaction.name} />
         })}
     </View>
     );

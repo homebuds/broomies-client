@@ -48,3 +48,9 @@ export type Summary = {
     amountOwed: number,
     roommatePointsAmount: number
 }
+
+export type Transaction = {
+    owed: number,
+    accountId: string,
+    name: string
+}

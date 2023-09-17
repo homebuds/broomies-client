@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import { Image } from 'react-native-elements';
+import { Account } from '../types/backend';
 
 
 interface ITransactionCard {
@@ -17,7 +18,7 @@ const TransactionCard = (props: ITransactionCard) => {
 
     const { user, description, owed } = props
 
-    const [data, setData] = useState(null)
+    const [data, setData] = useState<Account>()
     const [loading, setLoading] = useState(true);
 
     const getCurrentDate = () => {
