@@ -5,6 +5,7 @@ import { AssignedChore } from '../types/backend';
 import axios from 'axios';
 import ChoreCard from '../components/ChoreCard';
 import { useDispatch, useSelector } from 'react-redux';
+import { addChore } from '../slice/ChoresSlice';
 
 const styles = StyleSheet.create({
   container: {
@@ -160,13 +161,13 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
     const res = await axios.patch(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/${id}/complete`);
 
     dispatch(addChore({
-      id: item.id,
-      description: item.description ?? '',
-      householdId: item.householdId ?? '',
-      name: item.name ?? '',
-      points: item.points,
-      icon: item.icon
-  }));
+      id: data[0][0].id,
+      description: data[0][0].description ?? '',
+      householdId: data[0][0].householdId ?? '',
+      name: data[0][0].name ?? '',
+      points: data[0][0].points,
+      icon: data[0][0].icon
+    }));
 
     if (res) {
       setRefetch(true);
