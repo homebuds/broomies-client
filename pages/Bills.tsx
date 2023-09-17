@@ -88,7 +88,7 @@ const Bills = ({ user, household }: IBills) => {
         <View style={styles.optionsContainer}>
             <Text style={styles.transactionTitle}>Transactions</Text>
             <TouchableOpacity onPress={() => setShowDropdown(prev => !prev)}><ArrowDownIcon style={showDropdown ? styles.dropdownIconUp : styles.dropdownIconDown} />
-            
+
             </TouchableOpacity>
         </View>
         {showDropdown && <View style={styles.dropdownContent}>
@@ -123,10 +123,9 @@ const Bills = ({ user, household }: IBills) => {
                 }}
             /></View>}
 
-            {transactionHistory.map((transaction) => {
-                console.log(transaction.owed)
-                return <TransactionCard owed={transaction.owed} user={transaction.accountId} description={transaction.name}/>
-            })}
+        {transactionHistory.map((transaction) => {
+            return <TransactionCard owed={transaction.owed} user={transaction.accountId} description={transaction.name} />
+        })}
     </View>
     );
 };

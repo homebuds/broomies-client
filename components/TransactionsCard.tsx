@@ -25,13 +25,11 @@ const TransactionCard = (props: ITransactionCard) => {
         const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 because months are zero-based
         const day = String(currentDate.getDate()).padStart(2, '0');
         const year = currentDate.getFullYear();
-      
+
         const formattedDate = `${month}/${day}/${year}`;
-        
+
         return formattedDate;
     };
-
-    console.log(owed)
 
     useEffect(() => {
         // Define the API endpoint
@@ -39,41 +37,40 @@ const TransactionCard = (props: ITransactionCard) => {
 
         // Make a GET request to the API
         axios.get(apiUrl)
-        .then(response => {
-            setData(response.data);
-            setLoading(false);
-            console.log(response.data)
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
+            .then(response => {
+                setData(response.data);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
     }, [user]);
 
     return (
         <View style={styles.container}>
-            <Image style={styles.image} source={data ? {uri: data.pictureUrl as string } : {uri: require("../icons/emptyPic.png")}}/>
+            <Image style={styles.image} source={data ? { uri: data.pictureUrl as string } : { uri: require("../icons/emptyPic.png") }} />
             <View style={styles.textCol}>
                 <Text style={styles.textName}>{data?.firstName ?? ''} </Text>
                 <Text style={styles.textAction}>{description}</Text>
                 <Text style={styles.textDate}>{getCurrentDate()}</Text>
             </View>
-            {owed >= 0? 
-            <View style={styles.textColInfo}>
-                <Text style={styles.textOwe}>You owe</Text>
-                <Text style={{color: "#FA9A9A", marginLeft: 'auto'}}>${owed}</Text>
-                {/* <TouchableOpacity style={styles.reviewButton} onPress={()=>{}}>
+            {owed >= 0 ?
+                <View style={styles.textColInfo}>
+                    <Text style={styles.textOwe}>You owe</Text>
+                    <Text style={{ color: "#FA9A9A", marginLeft: 'auto' }}>${owed}</Text>
+                    {/* <TouchableOpacity style={styles.reviewButton} onPress={()=>{}}>
                     <Text style={{color: 'blue', marginLeft: 'auto'}}>View</Text>
                 </TouchableOpacity> */}
-            </View> : 
-            <View style={styles.textColInfo}>
-                <Text style={styles.textGain}>You get</Text>
-                <Text style={{color: "#97CA78", marginLeft: 'auto'}}>${-1 * owed}</Text>
-                {/* <TouchableOpacity style={styles.reviewButton} onPress={()=>{}}>
+                </View> :
+                <View style={styles.textColInfo}>
+                    <Text style={styles.textGain}>You get</Text>
+                    <Text style={{ color: "#97CA78", marginLeft: 'auto' }}>${-1 * owed}</Text>
+                    {/* <TouchableOpacity style={styles.reviewButton} onPress={()=>{}}>
                     <Text style={{color: 'blue'}}>View</Text>
                 </TouchableOpacity> */}
-            </View>
+                </View>
             }
-                {/* {status == 'complete' && 
+            {/* {status == 'complete' && 
                 <TouchableOpacity style={styles.reviewButton} onPress={()=>{}}>
                     <Text style={{color: 'blue'}}>Review</Text>
                 </TouchableOpacity>
@@ -151,7 +148,7 @@ const styles = StyleSheet.create({
         // position: "absolute",
         left: "auto",
         marginLeft: 'auto'
-    }   
+    }
 })
 
 export default TransactionCard;

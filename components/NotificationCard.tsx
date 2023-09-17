@@ -18,11 +18,11 @@ const getCurrentDate = () => {
     const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 because months are zero-based
     const day = String(currentDate.getDate()).padStart(2, '0');
     const year = currentDate.getFullYear();
-  
+
     const formattedDate = `${month}/${day}/${year}`;
-    
+
     return formattedDate;
-  };
+};
 
 const NotificationCard = (props: INotificationCard) => {
 
@@ -30,7 +30,7 @@ const NotificationCard = (props: INotificationCard) => {
 
     return (
         <View style={styles.container}>
-            <Image style={styles.image} source={picture ? {uri: picture as string } : {uri: require("../icons/emptyPic.png")}}/>
+            <Image style={styles.image} source={picture ? { uri: picture as string } : require("../icons/emptyPic.png")} />
             <View style={styles.textCol}>
                 <View style={styles.textRow}>
                     <Text style={styles.textName}>{exampleName} </Text>
@@ -39,11 +39,11 @@ const NotificationCard = (props: INotificationCard) => {
                 <Text style={styles.textChore}>{exampleChore}</Text>
                 <Text style={styles.textDate}>{getCurrentDate()}</Text>
             </View>
-                {status == 'complete' && 
-                <TouchableOpacity style={styles.reviewButton} onPress={()=>{}}>
-                    <Text style={{ color: 'blue'}}>Review</Text>
+            {status == 'complete' &&
+                <TouchableOpacity style={styles.reviewButton} onPress={() => { }}>
+                    <Text style={{ color: 'blue' }}>Review</Text>
                 </TouchableOpacity>
-                }
+            }
         </View>
     )
 }
