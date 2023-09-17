@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
+import NotificationCard from './NotificationCard';
+import axios from 'axios';
 
 interface NotificationsModalProps {
   notifications: string[];
   isVisible: boolean;
   onClose: () => void;
   title: string;
+  pictureUrl: string | undefined
 }
 
 const TOP_MARGIN = 0; // Adjust this value as needed
@@ -15,8 +18,12 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
   isVisible,
   onClose,
   title,
+  pictureUrl
 }) => {
-  return (
+
+    console.log(pictureUrl)
+
+    return (
     <Modal
       animationType="slide"
       transparent={true}
@@ -33,10 +40,9 @@ const NotificationsModal: React.FC<NotificationsModalProps> = ({
             </TouchableOpacity>
           </View>
           <View style={styles.notificationList}>
+            {/* Need to add way to get user image for diff users instead of only using 1 image */}
             {notifications.map((notification, index) => (
-              <Text key={index} style={styles.notificationItem}>
-                {notification}
-              </Text>
+                <NotificationCard status={'complete'} picture={pictureUrl}/>
             ))}
           </View>
         </View>
@@ -51,7 +57,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f9f9f9',
-    marginTop: 50
+    marginTop: 50,
+    display: 'flex',
+    alignContent: 'center'
   },
   modalContent: {
     flex: 1,
@@ -71,8 +79,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   notificationList: {
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     paddingBottom: 20,
+    marginTop: 10,
+    display: 'flex',
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   notificationItem: {
     fontSize: 16,
@@ -86,6 +99,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold'
   },
+  
 });
 
 export default NotificationsModal;

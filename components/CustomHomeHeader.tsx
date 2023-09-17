@@ -48,7 +48,7 @@ const HomeHeader: React.FC<HeaderProps> = ({ title, user }) => {
                 <Image style={styles.headerImage} source={require('../icons/Notification.png')} />
             </TouchableOpacity>
         </View>
-        <NotificationsModal title={"hihi"} notifications={[]} isVisible={isModalOpen} onClose={() => setIsModalOpen(false)}/>
+        <NotificationsModal pictureUrl={data?.pictureUrl} title={"hihi"} notifications={[]} isVisible={isModalOpen} onClose={() => setIsModalOpen(false)}/>
     </View>
   );
 };
