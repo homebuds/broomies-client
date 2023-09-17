@@ -149,14 +149,28 @@ const Home = ({ user }: IHome) => {
         }
     }, [placements]);
 
-    console.log(placements);
+    const getCurrentMonth = () => {
+      const monthNames = [
+        'January', 'February', 'March', 'April',
+        'May', 'June', 'July', 'August',
+        'September', 'October', 'November', 'December'
+      ];
+    
+      const currentDate = new Date();
+      const currentMonthNumber = currentDate.getMonth(); // Zero-based month number
+    
+      const currentMonth = monthNames[currentMonthNumber];
+      
+      return currentMonth;
+    };
+
     return (
         <View style={styles.container}>
             {isLoading ? (
-                <ActivityIndicator />
+                <ActivityIndicator/>
             ) : (
                 <>
-                    <Text>January</Text>
+                    <Text style={{alignSelf: "center", alignItems: 'center', marginTop: 16, fontSize: 20, fontWeight: 700}}>{getCurrentMonth()}</Text>
                     <View style={{ bottom: -10, paddingEnd: 0, height: 600, flex: 1, flexDirection: "row", alignItems: "flex-end", columnGap: 20, flexWrap: "wrap", justifyContent: "center" }}>
                         {
                             placements.map((placement, index) =>
