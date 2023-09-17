@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, Text, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import ArrowDownIcon from '../icons/arrowdown.svg'
 import axios from 'axios';
@@ -25,7 +25,7 @@ const Bills = ({ user, household }: IBills) => {
 
     const dispatch = useDispatch();
 
-    const transaction = useSelector((state: RootState) => state.transactions.transactions); 
+    const transaction = useSelector((state: RootState) => state.transactions.transactions);
 
     const createTransaction = async () => {
         const res = await axios.put(`${process.env.EXPO_PUBLIC_API_URL}/api/financial-transaction`, {
@@ -131,11 +131,15 @@ const Bills = ({ user, household }: IBills) => {
                     createTransaction();
                 }}
             /></View>}
-
-        {transactionHistory.map((transaction: Transaction, index) => {
-            return <TransactionCard key={index} owed={transaction.owed} user={transaction.accountId} description={transaction.name} />
-        })}
-    </View>
+        <FlatList
+            data={transactionHistory}
+            keyExtractor={({ id }) => id}
+            ItemSeparatorComponent={() => <View style={{ width: 25 }} />}
+            style={{ overflow: "scroll", width: "100%", maxHeight: 360, marginTop: 15 }}
+            renderItem={({ item, index }) => (
+                <TransactionCard key={index} owed={item.owed} user={item.accountId} description={item.name} />
+            )} />
+    </View >
     );
 };
 
