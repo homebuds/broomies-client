@@ -28,6 +28,7 @@ export type Account = {
 export type Chore = {
     id: string;
     description: string;
+    householdId: string;
     name: string;
     points: number;
     icon: string;

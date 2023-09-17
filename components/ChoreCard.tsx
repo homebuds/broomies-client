@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Switch, FlatList, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { AssignedChore } from '../types/backend';
+import { useDispatch, useSelector } from 'react-redux';
+import { addChore } from '../slice/ChoresSlice';
 
 const styles = StyleSheet.create({
     container: {
@@ -115,11 +117,13 @@ interface IChoreCard {
 
 const ChoreCard = ({ item, user, completeTask }: IChoreCard) => {
     const [isEnabled, setIsEnabled] = useState<boolean>(item.completed);
+
     const toggleSwitch = () => {
         setIsEnabled(previousState => {
             return !previousState
         });
         completeTask(item.id);
+
     };
 
     return <View style={[styles.listItemShadow, item.completed ? styles.listItemComplete : new Date(item.dueDate) < new Date() ? styles.listItemOverdue : styles.listItemInProgress, styles.listItem]}>

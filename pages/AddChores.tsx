@@ -5,6 +5,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Frame from "../icons/frame.svg";
 import CheckboxIcon from '../icons/checkbox.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { addChore } from '../slice/ChoresSlice';
 
 const styles = StyleSheet.create({
     container: {
@@ -133,6 +135,8 @@ const AddChores = ({ refetch }: IAddChores) => {
     const [loading, setLoading] = useState(false);
     const [description, setDescription] = useState<string>('');
 
+    const dispatch = useDispatch();
+
     const initialWeekdays: Weekday[] = [
         { name: 'Sun', selected: false },
         { name: 'Mon', selected: false },
@@ -159,6 +163,7 @@ const AddChores = ({ refetch }: IAddChores) => {
     };
     const handleCreate = async () => {
         setLoading(true);
+        
         try {
 
             const household = await AsyncStorage.getItem(
@@ -182,6 +187,14 @@ const AddChores = ({ refetch }: IAddChores) => {
             })
             if (res.data) {
                 Alert.alert('successully added chore!');
+                dispatch(addChore({
+                    id: '',
+                    name: title,
+                    description: description,
+                    householdId: '',
+                    points: points,
+                    icon: emoji
+                }));
                 refetch();
             }
         } catch (error) {

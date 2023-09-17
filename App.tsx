@@ -16,6 +16,9 @@ import Home from './pages/Home';
 import Bills from './pages/Bills';
 import HomeHeader from './components/CustomHomeHeader';
 
+import { Provider } from 'react-redux';
+import store from './store/store'; // Import your store
+
 const Stack = createNativeStackNavigator();
 
 const Tab = createBottomTabNavigator();
@@ -60,6 +63,7 @@ const App = () => {
   }, []);
   return (
     <SafeAreaProvider>
+      <Provider store={store}>
       {isLoading ?
         (
           <ActivityIndicator />
@@ -71,14 +75,16 @@ const App = () => {
                 backgroundColor: '#ffffff'
               }, headerShown: true
             }} tabBar={(props) => <Footer {...props} />}>
-              <Tab.Screen name="Home" component={Home} options={{
+              <Tab.Screen name="Home" options={{
                 headerTitle: () => <HomeHeader title='hi' user={user} />, headerStyle: {
                   elevation: 0,
                   shadowOpacity: 0,
                   borderBottomWidth: 0,
                   backgroundColor: '#ECF0EB'
                 }
-              }} />
+              }}>
+                {(props) => <Home user={user}/>}
+                </Tab.Screen>
               <Tab.Screen name="Chores" options={{
                 headerTitle: () => <View />, headerStyle: {
                   elevation: 0,
@@ -96,6 +102,7 @@ const App = () => {
             </Stack.Navigator>}
         </NavigationContainer>
       }
+      </Provider>
     </SafeAreaProvider >
   );
 };

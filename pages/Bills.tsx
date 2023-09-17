@@ -7,6 +7,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import TransactionCard from '../components/TransactionsCard';
 import { Summary } from '../types/backend';
 import { Transaction } from '../types/backend';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/store';
+import { addTransaction } from '../slice/TransactionsSlice';
 
 interface IBills {
     user?: string;
@@ -20,6 +23,10 @@ const Bills = ({ user, household }: IBills) => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [transactionHistory, setTransactionHistory] = useState([])
 
+    const dispatch = useDispatch();
+
+    const transaction = useSelector((state: RootState) => state.transactions.transactions); 
+
     const createTransaction = async () => {
         const res = await axios.put(`${process.env.EXPO_PUBLIC_API_URL}/api/financial-transaction`, {
             amount: Number.parseFloat(cost),
@@ -29,6 +36,7 @@ const Bills = ({ user, household }: IBills) => {
             householdId: household
         })
         if (res.status == 200) {
+            dispatch(addTransaction(title));
             setTitle("");
             setCost("");
             Alert.alert("successfully added transaction!")
@@ -60,7 +68,7 @@ const Bills = ({ user, household }: IBills) => {
             }
         }
         getSummary();
-    }, [])
+    }, [transaction])
 
     useEffect(() => {
         const getHistory = async () => {
@@ -70,7 +78,7 @@ const Bills = ({ user, household }: IBills) => {
             }
         }
         getHistory();
-    }, [])
+    }, [transaction])
 
     return (<View style={styles.container}>
         <Text style={styles.title}>Since you've last settled...</Text>

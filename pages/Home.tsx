@@ -4,6 +4,8 @@ import { Account, AssignedChore } from '../types/backend';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HorizontalList from '../components/HorizontalList';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
 const styles = StyleSheet.create({
     container: {
@@ -58,7 +60,7 @@ interface Placement {
     account: Account
 }
 interface IHome {
-    user?: string;
+    user: string;
 }
 
 const Home = ({ user }: IHome) => {
@@ -67,6 +69,7 @@ const Home = ({ user }: IHome) => {
     const [data, setData] = useState([]);
     const [max, setMax] = useState<Placement>();
     const [placements, setPlacements] = useState<Placement[]>([]);
+    const chores = useSelector((state: RootState) => state.chores.chores);
 
     const getChores = async () => {
         const fetchChores = async () => {
@@ -74,9 +77,11 @@ const Home = ({ user }: IHome) => {
             try {
                 const res = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/list/${household}`);
                 let tempChores = res.data;
-                if (user) {
-                    tempChores = tempChores.filter((chore: AssignedChore) => chore.accountId === user)
-                }
+                tempChores = tempChores.filter((chore: AssignedChore) => {
+                  console.log(chore.accountId)
+                  console.log(user)
+                  return chore.accountId === user
+                })
                 setData(tempChores.map((chore: any) => {
                     return {
                         ...chore.chore,
@@ -134,7 +139,7 @@ const Home = ({ user }: IHome) => {
             getChores();
             getPlacements();
         }
-    }, [household]);
+    }, [household, chores]);
 
     useEffect(() => {
         if (placements.length) {

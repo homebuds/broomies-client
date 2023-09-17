@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AssignedChore } from '../types/backend';
 import axios from 'axios';
 import ChoreCard from '../components/ChoreCard';
+import { useDispatch, useSelector } from 'react-redux';
 
 const styles = StyleSheet.create({
   container: {
@@ -109,6 +110,8 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
   const [household, setHousehold] = useState('');
   const [data, setData] = useState<{ [key: string]: AssignedChore[] }>({});
 
+  const dispatch = useDispatch();
+
   const getChores = async () => {
     const fetchChores = async () => {
       setLoading(true);
@@ -155,6 +158,15 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
 
   const completeTask = async (id: string) => {
     const res = await axios.patch(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/${id}/complete`);
+
+    dispatch(addChore({
+      id: item.id,
+      description: item.description ?? '',
+      householdId: item.householdId ?? '',
+      name: item.name ?? '',
+      points: item.points,
+      icon: item.icon
+  }));
 
     if (res) {
       setRefetch(true);
