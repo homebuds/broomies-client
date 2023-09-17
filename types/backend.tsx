@@ -4,13 +4,16 @@ export type AssignedChore = {
     id: string;
     choreId: string;
     accountId: string;
+    householdId?: string;
     dueDate: string;
     completed: boolean;
     description?: string;
     name?: string;
     firstName?: string;
     lastName?: string;
-    photo?: string;
+    pictureUrl?: string;
+    points: number;
+    icon: string;
 };
 
 export type Account = {
@@ -24,8 +27,10 @@ export type Account = {
 
 export type Chore = {
     id: string;
-    choreDescription: string;
-    choreName: string;
+    description: string;
+    name: string;
+    points: number;
+    icon: string;
 };
 
 export type User = {
@@ -36,4 +41,10 @@ export type User = {
 export type tempElo = {
     id: string,
     elo: number
+}
+
+export type Summary = {
+    totalSpent: number,
+    amountOwed: number,
+    roommatePointsAmount: number
 }

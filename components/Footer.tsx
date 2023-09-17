@@ -10,7 +10,6 @@ const Footer: React.FC<BottomTabBarProps> = (props) => {
     const { state, navigation } = props;
     return (
         <View style={{
-            boxShadow: "3px 3px 10px 0px rgba(0, 0, 0, 0.85)",
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',

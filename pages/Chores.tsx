@@ -116,9 +116,9 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
         const res = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/list/${household}`);
         let tempChores = res.data;
         if (user) {
-          tempChores = tempChores.filter(chore => chore.accountId === user)
+          tempChores = tempChores.filter((chore: AssignedChore) => chore.accountId === user)
         }
-        setData(groupChoresByDay(tempChores.map(chore => {
+        setData(groupChoresByDay(tempChores.map((chore: any) => {
           return {
             ...chore.chore,
             ...chore.account,
@@ -127,7 +127,7 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
             accountId: chore.accountId,
             completed: chore?.completed
           }
-        }).sort((a, b) => Date.parse(a.dueDate) - Date.parse(b.dueDate))));
+        }).sort((a: AssignedChore, b: AssignedChore) => Date.parse(a.dueDate) - Date.parse(b.dueDate))));
       } catch (e) {
         console.log(e)
       }
@@ -212,8 +212,8 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
               <View style={styles.headerContainer}>
                 <Text style={{ fontSize: 18, fontWeight: '500', marginBottom: 12 }}>{day.split(', ')[0]}</Text><Text style={{ fontSize: 15, fontWeight: '400' }}>{day.split(', ')[1]}</Text>
               </View>
-              {data[day].map((item) => (
-                <ChoreCard item={item} user={user} completeTask={completeTask} />))}
+              {data[day].map((item, index) => (
+                <ChoreCard key={index} item={item} user={user as string} completeTask={completeTask} />))}
             </View>)
           }}
         />

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View, StyleSheet, Image } from 'react-native';
-import { AssignedChore } from '../types/backend';
+import { ActivityIndicator, Text, View, StyleSheet, Image } from 'react-native';
+import { Account, AssignedChore } from '../types/backend';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HorizontalList from '../components/HorizontalList';
-import LeaderboardBarChart from '../components/Leaderboard';
-import VerticalBarChart from '../components/Leaderboard';
 import axios from 'axios';
 
 const styles = StyleSheet.create({
@@ -54,6 +52,11 @@ const styles = StyleSheet.create({
     }
 });
 
+interface Placement {
+    points: number,
+    id: string,
+    account: Account
+}
 interface IHome {
     user?: string;
 }
@@ -62,9 +65,8 @@ const Home = ({ user }: IHome) => {
     const [household, setHousehold] = useState('');
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
-    const [max, setMax] = useState();
-    const [placements, setPlacements] = useState([]);
-    // const [placements, setPlacements] = useState([])
+    const [max, setMax] = useState<Placement>();
+    const [placements, setPlacements] = useState<Placement[]>([]);
 
     const getChores = async () => {
         const fetchChores = async () => {
@@ -73,9 +75,9 @@ const Home = ({ user }: IHome) => {
                 const res = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/list/${household}`);
                 let tempChores = res.data;
                 if (user) {
-                    tempChores = tempChores.filter(chore => chore.accountId === user)
+                    tempChores = tempChores.filter((chore: AssignedChore) => chore.accountId === user)
                 }
-                setData(tempChores.map(chore => {
+                setData(tempChores.map((chore: any) => {
                     return {
                         ...chore.chore,
                         ...chore.account,
@@ -84,7 +86,7 @@ const Home = ({ user }: IHome) => {
                         accountId: chore.accountId,
                         completed: chore?.completed
                     }
-                }).sort((a, b) => Date.parse(a.dueDate) - Date.parse(b.dueDate)));
+                }).sort((a: AssignedChore, b: AssignedChore) => Date.parse(a.dueDate) - Date.parse(b.dueDate)));
             } catch (e) {
                 console.log(e)
             }
@@ -119,13 +121,6 @@ const Home = ({ user }: IHome) => {
         getHousehold();
     }, []);
 
-    // const placements = [
-    //     { id: "1", firstName: 'Dennis', points: 2300, pictureUrl: "https://marketplace.canva.com/EAFewoMXU-4/1/0/1600w/canva-purple-pink-gradient-man-3d-avatar-0o0qE2T_kr8.jpg" },
-    //     { id: "2", firstName: 'Rus', points: 1900, pictureUrl: "https://blush-design.imgix.net/collections/rChdrB8vX8xQJunpDPp8/v16/Master/Avataaar/cropped/Default.svg?w=500&auto=compress&cs=srgb" },
-    //     { id: "3", firstName: 'Isaac', points: 1500, pictureUrl: "https://people.com/thmb/84W5-9FnCb0XLaqaoYwHasY5GwI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(216x0:218x2)/robert-pattinson-435-2-3f3472a03106439abee37574a6b8cef7.jpg" },
-    //     { id: "4", firstName: "Gordon", pictureUrl: "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg", points: 1300 }
-    // ];
-
     const colors = [
         "#C0F1C9",
         "#DBD2FB",
@@ -143,7 +138,7 @@ const Home = ({ user }: IHome) => {
 
     useEffect(() => {
         if (placements.length) {
-            setMax(placements.reduce(function (prev, current) {
+            setMax(placements.reduce((prev, current) => {
                 return (prev && prev.points > current.points) ? prev : current
             }))
         }
@@ -170,7 +165,7 @@ const Home = ({ user }: IHome) => {
                 <ActivityIndicator />
             ) : (
                 <>
-                    <Text style={{ alignSelf: "center", alignItems: 'center', marginTop: 16, fontSize: 20, fontWeight: 700 }}>{getCurrentMonth()}</Text>
+                    <Text style={{ alignSelf: "center", alignItems: 'center', marginTop: 16, fontSize: 20, fontWeight: "700" }}>{getCurrentMonth()}</Text>
                     <View style={{ bottom: -10, paddingEnd: 0, height: 600, flex: 1, flexDirection: "row", alignItems: "flex-end", columnGap: 20, flexWrap: "wrap", justifyContent: "center" }}>
                         {
                             placements.map((placement, index) =>
@@ -181,7 +176,7 @@ const Home = ({ user }: IHome) => {
                                         fontSize: 20,
                                         fontWeight: "600"
                                     }}>{placement.points}</Text>
-                                    <View style={{ width: "100%", height: `${(placement.points / max?.points) * 50}%`, backgroundColor: colors[index], borderTopLeftRadius: 20, borderTopEndRadius: 20 }} />
+                                    <View style={{ width: "100%", height: `${(placement.points / (max?.points || 1)) * 50}%`, backgroundColor: colors[index], borderTopLeftRadius: 20, borderTopEndRadius: 20 }} />
                                 </View>
                             )
                         }

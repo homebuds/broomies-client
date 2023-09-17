@@ -104,15 +104,19 @@ const styles = StyleSheet.create({
     }
 });
 
+interface IChoreCard {
+    item: AssignedChore,
+    user: string,
+    completeTask: (a: string) => void;
+}
 
-const ChoreCard = ({ item, user, completeTask }) => {
+const ChoreCard = ({ item, user, completeTask }: IChoreCard) => {
     const [isEnabled, setIsEnabled] = useState<boolean>(item.completed);
     const toggleSwitch = () => {
         setIsEnabled(previousState => {
-            completeTask(item.id, !previousState);
             return !previousState
         });
-
+        completeTask(item.id);
     };
 
     return <View style={[styles.listItemShadow, item.completed ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>

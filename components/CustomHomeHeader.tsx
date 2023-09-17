@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, Dimensions } from 'react-native';
-import { accounts, chores } from '../testdata';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import { Account } from '../types/backend';
 import NotificationsModal from './NotificationModal';
+import { Account } from '../types/backend';
 
 interface HeaderProps {
   title: string;
@@ -12,7 +11,7 @@ interface HeaderProps {
 
 const HomeHeader: React.FC<HeaderProps> = ({ title, user }) => {
 
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<Account | null>(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -36,7 +35,6 @@ const HomeHeader: React.FC<HeaderProps> = ({ title, user }) => {
     <View style={styles.header}>
       <View style={styles.headerUserInfo} >
         <Image style={styles.headerImage} source={loading ? require("../icons/emptyPic.png") : { uri: data?.pictureUrl as string }} />
-
         <View>
           <Text style={styles.headerMessage}>Welcome back!👋</Text>
           <Text style={styles.headerName}>{loading ? '' : data?.firstName}</Text>
