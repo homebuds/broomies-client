@@ -158,21 +158,35 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
   };
 
   const completeTask = async (id: string) => {
+    console.log("HEY", id)
     const res = await axios.patch(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/${id}/complete`);
 
-    dispatch(addChore({
-      id: data[0][0].id,
-      description: data[0][0].description ?? '',
-      householdId: data[0][0].householdId ?? '',
-      name: data[0][0].name ?? '',
-      points: data[0][0].points,
-      icon: data[0][0].icon
-    }));
+    // dispatch(addChore({
+    //   id: data[0][0]?.id,
+    //   description: data[0][0]?.description ?? '',
+    //   householdId: data[0][0]?.householdId ?? '',
+    //   name: data[0][0]?.name ?? '',
+    //   points: data[0][0]?.points,
+    //   icon: data[0][0]?.icon
+    // }));
 
     if (res) {
       setRefetch(true);
     }
   }
+
+  useEffect(() => {
+    if (data && data[0] && data[0][0]) {
+      dispatch(addChore({
+        id: data[0][0]?.id,
+        description: data[0][0]?.description ?? '',
+        householdId: data[0][0]?.householdId ?? '',
+        name: data[0][0]?.name ?? '',
+        points: data[0][0]?.points,
+        icon: data[0][0]?.icon
+      }));
+    }
+  }, [data])
 
   useEffect(() => {
     const getHousehold = async () => {

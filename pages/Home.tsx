@@ -6,6 +6,7 @@ import HorizontalList from '../components/HorizontalList';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
+import { useIsFocused } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
     container: {
@@ -64,6 +65,7 @@ interface IHome {
 }
 
 const Home = ({ user }: IHome) => {
+    const isFocused = useIsFocused();
     const [household, setHousehold] = useState('');
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
@@ -78,9 +80,9 @@ const Home = ({ user }: IHome) => {
                 const res = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/assigned-chore/list/${household}`);
                 let tempChores = res.data;
                 tempChores = tempChores.filter((chore: AssignedChore) => {
-                  console.log(chore.accountId)
-                  console.log(user)
-                  return chore.accountId === user
+                    console.log(chore.accountId)
+                    console.log(user)
+                    return chore.accountId === user
                 })
                 setData(tempChores.map((chore: any) => {
                     return {
@@ -133,13 +135,12 @@ const Home = ({ user }: IHome) => {
         "#C2EAFC"
     ]
 
-    // Render the vertical bar chart
     useEffect(() => {
         if (household) {
             getChores();
             getPlacements();
         }
-    }, [household, chores]);
+    }, [household, chores, isFocused]);
 
     useEffect(() => {
         if (placements.length) {
