@@ -232,7 +232,7 @@ const AddChores = ({ refetch }: IAddChores) => {
                 containerStyle={styles.inputContainer}
                 inputContainerStyle={styles.roundedInput}
             />
-            <Text style={styles.label}>Days</Text>
+            <Text style={styles.label}>Select day(s)</Text>
             {/* Weekday Selector */}
             <View style={styles.weekdayContainer}>
                 {weekdays.map((weekday, index) => (

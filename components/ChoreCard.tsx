@@ -86,6 +86,9 @@ const styles = StyleSheet.create({
     listItemInProgress: {
         backgroundColor: '#FFFDEA'
     },
+    listItemOverdue: {
+        backgroundColor: '#FFF1F1'
+    },
     flatListContainer: {
         maxHeight: '100%',
         padding: 15
@@ -119,7 +122,7 @@ const ChoreCard = ({ item, user, completeTask }: IChoreCard) => {
         completeTask(item.id);
     };
 
-    return <View style={[styles.listItemShadow, item.completed ? styles.listItemComplete : styles.listItemInProgress, styles.listItem]}>
+    return <View style={[styles.listItemShadow, item.completed ? styles.listItemComplete : new Date(item.dueDate) < new Date() ? styles.listItemOverdue : styles.listItemInProgress, styles.listItem]}>
         <View style={styles.listItemAvatar}>
             <Image style={styles.listItemImage} source={{ uri: item?.pictureUrl as string }} />
             <Text style={styles.listItemDescription}>{item?.firstName}</Text>
@@ -128,8 +131,8 @@ const ChoreCard = ({ item, user, completeTask }: IChoreCard) => {
             <Text style={styles.listItemTitle}>{item.name}</Text>
             <Text style={styles.listItemDescription}>{item.description}</Text>
             <View style={styles.listSubOptions}>
-                <Text>{`${item.completed ? "Complete" : "In Progress"}`}</Text>
-                <View style={item.completed ? styles.greenCircle : styles.yellowCircle}></View>
+                <Text>{`${item.completed ? "Complete" : new Date(item.dueDate) < new Date() ? "Overdue" : "In Progress"}`}</Text>
+                <View style={item.completed ? styles.greenCircle : new Date(item.dueDate) < new Date() ? styles.redCircle : styles.yellowCircle}></View>
             </View>
         </View>
         <Text style={styles.points}>+{item.points}</Text>
