@@ -126,7 +126,7 @@ const ChoreCard = ({ item, user, completeTask }: IChoreCard) => {
 
     };
 
-    return <View style={[styles.listItemShadow, item.completed ? styles.listItemComplete : new Date(item.dueDate) < new Date() ? styles.listItemOverdue : styles.listItemInProgress, styles.listItem]}>
+    return <View style={[styles.listItemShadow, isEnabled ? styles.listItemComplete : new Date(item.dueDate) < new Date() ? styles.listItemOverdue : styles.listItemInProgress, styles.listItem]}>
         <View style={styles.listItemAvatar}>
             <Image style={styles.listItemImage} source={{ uri: item?.pictureUrl as string }} />
             <Text style={styles.listItemDescription}>{item?.firstName}</Text>
@@ -135,8 +135,8 @@ const ChoreCard = ({ item, user, completeTask }: IChoreCard) => {
             <Text style={styles.listItemTitle}>{item.name}</Text>
             <Text style={styles.listItemDescription}>{item.description}</Text>
             <View style={styles.listSubOptions}>
-                <Text>{`${item.completed ? "Complete" : new Date(item.dueDate) < new Date() ? "Overdue" : "In Progress"}`}</Text>
-                <View style={item.completed ? styles.greenCircle : new Date(item.dueDate) < new Date() ? styles.redCircle : styles.yellowCircle}></View>
+                <Text>{`${isEnabled ? "Complete" : new Date(item.dueDate) < new Date() ? "Overdue" : "In Progress"}`}</Text>
+                <View style={isEnabled ? styles.greenCircle : new Date(item.dueDate) < new Date() ? styles.redCircle : styles.yellowCircle}></View>
             </View>
         </View>
         <Text style={styles.points}>+{item.points}</Text>

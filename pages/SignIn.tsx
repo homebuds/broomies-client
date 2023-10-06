@@ -55,7 +55,7 @@ const SignIn = ({ refetch }: ISignIn) => {
         setLoading(true);
         try {
             const res = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}/login`, {
-                email: email
+                email: email.toLocaleLowerCase()
             })
             await AsyncStorage.setItem(
                 'household',
@@ -77,82 +77,82 @@ const SignIn = ({ refetch }: ISignIn) => {
                 <ActivityIndicator />
             ) : (
                 <>
-                    <Logo width='166' height='182' style={{marginBottom: 108}}/>
+                    <Logo width='166' height='182' style={{ marginBottom: 108 }} />
                     {/* <Text>To sign in, please input your email</Text> */}
                     {alreadyHasAccount ? (
                         <>
-                        <TextInput
-                        style={styles.inputField}
-                        value={email}
-                        onChangeText={setEmail}
-                        keyboardType='email-address'
-                        autoCapitalize='none'
-                        placeholder='Email address'
-                        />
-                        <TextInput
-                        style={styles.inputField}
-                        placeholder='Password'
-                        autoCapitalize='none'
-                        />
-                        <View style={{marginBottom: 52}}>
-                            <Button title="Sign In" onPress={handleSignIn} />
-                        </View>
-                        <Pressable onPress={()=>{setAlreadyHasAccount(false)}}>
-                            <Text style={styles.text}>Other sign in methods</Text>
-                        </Pressable>
-                    </>) : 
+                            <TextInput
+                                style={styles.inputField}
+                                value={email}
+                                onChangeText={setEmail}
+                                keyboardType='email-address'
+                                autoCapitalize='none'
+                                placeholder='Email address'
+                            />
+                            <TextInput
+                                style={styles.inputField}
+                                placeholder='Password'
+                                autoCapitalize='none'
+                            />
+                            <View style={{ marginBottom: 52 }}>
+                                <Button title="Sign In" onPress={handleSignIn} />
+                            </View>
+                            <Pressable onPress={() => { setAlreadyHasAccount(false) }}>
+                                <Text style={styles.text}>Other sign in methods</Text>
+                            </Pressable>
+                        </>) :
                         <>
-                    
-                    <Pressable style={{
-                        width: 267,
-                        height: 53,
-                        flexShrink: 0,
-                        backgroundColor: 'white',
-                        display: 'flex',
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                        borderRadius: 16,
-                        flexDirection: 'row',
-                        marginBottom: 16
-                    }}
-                    onPress={() => {}}
-                    >
-                        <Google width={'25'} height={'25'} style={{marginLeft: 16, marginRight: 24}}/>
-                        <Text style={{
-                            fontSize: 15, 
-                            fontWeight: '600',
-                            // letterSpacing: -0.3
-                        }}>
-                            Sign in with Google
-                        </Text>
-                    </Pressable>
-                    <Pressable style={{
-                        width: 267,
-                        height: 53,
-                        flexShrink: 0,
-                        backgroundColor: 'white',
-                        display: 'flex',
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                        borderRadius: 16,
-                        flexDirection: 'row',
-                        marginBottom: 80,
-                    }}
-                    onPress={() => {}}
-                    >
-                        <Facebook width={'25'} height={'25'} style={{marginLeft: 16, marginRight: 24}}/>
-                        <Text style={{
-                            fontSize: 15, 
-                            fontWeight: '600',
-                            // letterSpacing: -0.3
-                        }}>
-                            Sign in with Facebook
-                        </Text>
-                    </Pressable>
-                    <Pressable onPress={()=>{setAlreadyHasAccount(true)}}>
-                        <Text style={styles.text}>I already have an account</Text>
-                    </Pressable>
-                </>}
+
+                            <Pressable style={{
+                                width: 267,
+                                height: 53,
+                                flexShrink: 0,
+                                backgroundColor: 'white',
+                                display: 'flex',
+                                alignItems: "center",
+                                justifyContent: "flex-start",
+                                borderRadius: 16,
+                                flexDirection: 'row',
+                                marginBottom: 16
+                            }}
+                                onPress={() => { }}
+                            >
+                                <Google width={'25'} height={'25'} style={{ marginLeft: 16, marginRight: 24 }} />
+                                <Text style={{
+                                    fontSize: 15,
+                                    fontWeight: '600',
+                                    // letterSpacing: -0.3
+                                }}>
+                                    Sign in with Google
+                                </Text>
+                            </Pressable>
+                            <Pressable style={{
+                                width: 267,
+                                height: 53,
+                                flexShrink: 0,
+                                backgroundColor: 'white',
+                                display: 'flex',
+                                alignItems: "center",
+                                justifyContent: "flex-start",
+                                borderRadius: 16,
+                                flexDirection: 'row',
+                                marginBottom: 80,
+                            }}
+                                onPress={() => { }}
+                            >
+                                <Facebook width={'25'} height={'25'} style={{ marginLeft: 16, marginRight: 24 }} />
+                                <Text style={{
+                                    fontSize: 15,
+                                    fontWeight: '600',
+                                    // letterSpacing: -0.3
+                                }}>
+                                    Sign in with Facebook
+                                </Text>
+                            </Pressable>
+                            <Pressable onPress={() => { setAlreadyHasAccount(true) }}>
+                                <Text style={styles.text}>I already have an account</Text>
+                            </Pressable>
+                        </>}
                 </>
             )}
         </View>

@@ -169,7 +169,6 @@ const Chores = ({ user, refetch, setRefetch }: IChores) => {
     //   points: data[0][0]?.points,
     //   icon: data[0][0]?.icon
     // }));
-
     if (res) {
       setRefetch(true);
     }
