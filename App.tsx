@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator } from 'react-native-paper';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Footer from './components/Footer';
 import {
@@ -28,10 +28,6 @@ const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    // backgroundColor: 'linear-gradient(173deg, #FFFCF5, #FFF6DE, #FFEFC6)',
-    backgroundImage: 'linear-gradient(to right, #439bfd, #73b3fb)'
-
-
   },
 };
 
@@ -84,7 +80,7 @@ const App = () => {
                   elevation: 0,
                   shadowOpacity: 0,
                   borderBottomWidth: 0,
-                  backgroundColor: '#ECF0EB'
+                  backgroundColor: '#FFFCF4'
                 }
               }}>
                 {(props) => <Home user={user}/>}
@@ -95,16 +91,40 @@ const App = () => {
                   shadowOpacity: 0,
                   borderBottomWidth: 0,
                   height: 55,
-                  backgroundColor: '#ffffff'
+                  backgroundColor: '#FFFCF4'
                 }
               }} children={(props) => <CustomChoresTab {...props} user={user} />} />
-              <Tab.Screen name="Bills" children={(props) => <Bills {...props} user={user} household={household} />} />
+              <Tab.Screen 
+              name="Bills" 
+              children={(props) => <Bills {...props} user={user} household={household} />} 
+              options={{
+                headerTitle: () => 
+                // <View style={{
+                //   width: '100%', 
+                //   display: 'flex', 
+                //   flexDirection: 'row', 
+                //   justifyContent: 'flex-start',
+                //   backgroundColor: 'blue'
+                // }}>
+                //   <Text style={{
+                //     width: '100%', 
+                //     display: 'flex', 
+                //     justifyContent: 'flex-start',
+                //     fontSize: 20,
+                //     fontWeight: '600'
+                //   }}>
+                //     Bills
+                //   </Text>
+                // </View>, 
+                <View />,
+                headerStyle: {backgroundColor: '#FFFCF4', borderBottomWidth: 0, elevation: 0, shadowOpacity: 0, height: 50},
+                // options={{headerShown: false}}
+              }}/>
               <Tab.Screen name="Log Out" children={(props) => <SignOut {...props} refetch={retrieveUser} />} />
             </Tab.Navigator>
             : <Stack.Navigator>
               
               <Stack.Screen name="Sign In" children={(props) => <LinearGradient
-            // Background Linear Gradient
             colors={['#FFFCF5', '#FFF6DE', '#FFEFC6']}
             style={{
               padding: 25,

@@ -9,7 +9,17 @@ const ChoresTab = createMaterialTopTabNavigator();
 const CustomTabBar: React.FC<MaterialTopTabBarProps> = (props) => {
   const { state, navigation } = props;
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingLeft: 25, paddingRight: 25, height: 50, backgroundColor: "#ffffff", borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
+    <View style={{ 
+      flexDirection: 'row', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      paddingLeft: 25, 
+      paddingRight: 25, 
+      height: 50, 
+      backgroundColor: '#FFFCF4', 
+      borderBottomLeftRadius: 16, 
+      borderBottomRightRadius: 16 
+    }}>
       {props.state.routes.map((route, index) => <View key={index}>
         <TouchableOpacity
           key={index}

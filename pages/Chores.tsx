@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddinrg: 12,
-    backgroundColor: '#ECF0EB',
+    backgroundColor: '#FFFCF4',
   },
   listItem: {
     padding: 16,

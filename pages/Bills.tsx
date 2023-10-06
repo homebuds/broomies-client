@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Text, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { Alert, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import ArrowDownIcon from '../icons/arrowdown.svg'
 import axios from 'axios';
@@ -25,7 +25,7 @@ const Bills = ({ user, household }: IBills) => {
 
     const dispatch = useDispatch();
 
-    const transaction = useSelector((state: RootState) => state.transactions.transactions);
+    const transaction = useSelector((state: RootState) => state.transactions.transactions); 
 
     const createTransaction = async () => {
         const res = await axios.put(`${process.env.EXPO_PUBLIC_API_URL}/api/financial-transaction`, {
@@ -80,8 +80,23 @@ const Bills = ({ user, household }: IBills) => {
         getHistory();
     }, [transaction])
 
+    const getCurrentMonth = () => {
+        const monthNames = [
+            'January', 'February', 'March', 'April',
+            'May', 'June', 'July', 'August',
+            'September', 'October', 'November', 'December'
+        ];
+
+        const currentDate = new Date();
+        const currentMonthNumber = currentDate.getMonth(); // Zero-based month number
+
+        const currentMonth = monthNames[currentMonthNumber];
+
+        return currentMonth;
+    };
+
     return (<View style={styles.container}>
-        <Text style={styles.title}>Since you've last settled...</Text>
+        <Text style={styles.title}>{getCurrentMonth()}</Text>
         {summary && <View style={[styles.sumContainer, styles.sumContainerShadow]}>
             <LinearGradient
                 // Background Linear Gradient
@@ -131,26 +146,24 @@ const Bills = ({ user, household }: IBills) => {
                     createTransaction();
                 }}
             /></View>}
-        <FlatList
-            data={transactionHistory}
-            keyExtractor={({ id }) => id}
-            ItemSeparatorComponent={() => <View style={{ width: 25 }} />}
-            style={{ overflow: "scroll", width: "100%", maxHeight: 360, marginTop: 15 }}
-            renderItem={({ item, index }) => (
-                <TransactionCard key={index} owed={item.owed} user={item.accountId} description={item.name} />
-            )} />
-    </View >
+
+        {transactionHistory.map((transaction: Transaction, index) => {
+            return <TransactionCard key={index} owed={transaction.owed} user={transaction.accountId} description={transaction.name} />
+        })}
+    </View>
     );
 };
 
 
 const styles = StyleSheet.create({
     container: {
-        padding: 30
+        padding: 30,
+        
     },
     sumContainer: {
         borderRadius: 20,
         marginBottom: 18,
+        width: '100%'
     },
     sumContainerShadow: {
         shadowColor: 'rgba(0, 0, 0, 0.15)',
@@ -162,7 +175,10 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
     },
     title: {
-        marginBottom: 8
+        marginBottom: 8,
+        fontSize: 25,
+        fontStyle: 'normal',
+        fontWeight: '600',
     },
     dropdownContent: {
         marginTop: 17,

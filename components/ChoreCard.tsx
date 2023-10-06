@@ -7,7 +7,7 @@ import { addChore } from '../slice/ChoresSlice';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddinrg: 12,
+        padding: 12,
         backgroundColor: '#ECF0EB',
     },
     listItem: {

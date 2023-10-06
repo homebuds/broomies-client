@@ -7,16 +7,18 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { useIsFocused } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: "auto",
-        height: '100%'
+        height: '100%',
+        backgroundColor: '#FFFCF4'
     },
     listItem: {
         padding: 16,
-        backgroundColor: '#f9f9f9',
+        backgroundColor: '#FFFCF4',
         marginBottom: 8,
         borderRadius: 8,
         height: "100%",
@@ -129,10 +131,10 @@ const Home = ({ user }: IHome) => {
     }, []);
 
     const colors = [
-        "#C0F1C9",
-        "#DBD2FB",
-        "#FED8A3",
-        "#C2EAFC"
+        ["#D5F5Df", "#C0F1C9"],
+        ["#FCE3FC", "#DBD2FB"],
+        ["#FFE9A4", "#FED8A3"],
+        ["#D3FBFD", "#C2EAFC"]
     ]
 
     useEffect(() => {
@@ -182,7 +184,17 @@ const Home = ({ user }: IHome) => {
                                         fontSize: 20,
                                         fontWeight: "600"
                                     }}>{placement.points}</Text>
-                                    <View style={{ width: "100%", height: `${(placement.points / (max?.points || 1)) * 50}%`, backgroundColor: colors[index], borderTopLeftRadius: 20, borderTopEndRadius: 20 }} />
+                                    <LinearGradient 
+                                      colors={[colors[index][0], colors[index][1]]}
+                                      start={[0, 0]}
+                                      end={[1, 1]}
+                                      style={{
+                                        padding: 25,
+                                        borderRadius: 20,
+                                    }}
+                                    >
+                                      <View style={{ width: "100%", height: `${(placement.points / (max?.points || 1)) * 50}%`, borderTopLeftRadius: 20, borderTopEndRadius: 20 }} />
+                                    </LinearGradient>
                                 </View>
                             )
                         }
