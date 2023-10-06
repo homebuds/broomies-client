@@ -34,7 +34,7 @@ const TransactionCard = (props: ITransactionCard) => {
 
     useEffect(() => {
         // Define the API endpoint
-        const apiUrl = `https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/account/${user}`;
+        const apiUrl = `${process.env.EXPO_PUBLIC_API_URL}/api/account/${user}`;
 
         // Make a GET request to the API
         axios.get(apiUrl)
