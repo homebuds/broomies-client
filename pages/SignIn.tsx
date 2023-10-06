@@ -90,6 +90,7 @@ const SignIn = ({ refetch }: ISignIn) => {
                                 placeholder='Email address'
                             />
                             <TextInput
+                                secureTextEntry={true}
                                 style={styles.inputField}
                                 placeholder='Password'
                                 autoCapitalize='none'
