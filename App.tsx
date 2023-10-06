@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator } from 'react-native-paper';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Footer from './components/Footer';
 import {
@@ -18,6 +18,7 @@ import HomeHeader from './components/CustomHomeHeader';
 
 import { Provider } from 'react-redux';
 import store from './store/store'; // Import your store
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,7 +28,6 @@ const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#ECF0EB'
   },
 };
 
@@ -76,7 +76,7 @@ const App = () => {
                 }, headerShown: true
               }} tabBar={(props) => <Footer {...props} />}>
                 <Tab.Screen name="Home" options={{
-                  headerTitle: () => <HomeHeader title='hi' user={user} household={household} />, headerStyle: {
+                  headerTitle: () => <HomeHeader title='hi' user={user} />, headerStyle: {
                     elevation: 0,
                     shadowOpacity: 0,
                     borderBottomWidth: 0,

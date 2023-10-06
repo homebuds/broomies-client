@@ -4,14 +4,12 @@ import { AssignedChore } from '../types/backend';
 const styles = StyleSheet.create({
     container: {
         alignSelf: "flex-end",
-        paddingTop: 20,
-        paddingBottom: 20,
         display: "flex",
         height: 275,
         width: '100%',
         borderTopLeftRadius: 20,
         borderTopEndRadius: 20,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#FFFCF4',
         boxShadow: "3px 4px 15px 2px rgba(0,0,0,0.66)",
     },
     listItem: {
@@ -25,7 +23,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         marginBottom: 8,
         borderRadius: 20,
-        height: "100%",
+        height: 186,
         width: 160,
         boxShadow: "1px 4px 15px 2px rgba(0,0,0,0.66)"
     },
@@ -41,8 +39,8 @@ const styles = StyleSheet.create({
             width: 0,
             height: 0,
         },
-        shadowOpacity: 0.2,
-        shadowRadius: 11,
+        shadowOpacity: 0.1,
+        shadowRadius: 6,
     },
     listSubOptions: {
         display: 'flex',
@@ -78,8 +76,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: "600",
-        margin: 20,
-        marginTop: 8
+        marginLeft: 26,
+        marginTop: 22
     },
     listItemTitle: {
         fontSize: 15,
