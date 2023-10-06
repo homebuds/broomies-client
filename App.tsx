@@ -18,6 +18,7 @@ import HomeHeader from './components/CustomHomeHeader';
 
 import { Provider } from 'react-redux';
 import store from './store/store'; // Import your store
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,7 +28,10 @@ const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#ECF0EB'
+    // backgroundColor: 'linear-gradient(173deg, #FFFCF5, #FFF6DE, #FFEFC6)',
+    backgroundImage: 'linear-gradient(to right, #439bfd, #73b3fb)'
+
+
   },
 };
 
@@ -98,7 +102,17 @@ const App = () => {
               <Tab.Screen name="Log Out" children={(props) => <SignOut {...props} refetch={retrieveUser} />} />
             </Tab.Navigator>
             : <Stack.Navigator>
-              <Stack.Screen name="Sign In" children={(props) => <SignIn {...props} refetch={retrieveUser} />} />
+              
+              <Stack.Screen name="Sign In" children={(props) => <LinearGradient
+            // Background Linear Gradient
+            colors={['#FFFCF5', '#FFF6DE', '#FFEFC6']}
+            style={{
+              padding: 25,
+              borderRadius: 20,
+              height: '100%',
+          }}
+            ><SignIn {...props} refetch={retrieveUser} /></LinearGradient>} options={{headerShown: false}}/>
+              {/* <Stack.Screen name="Sign In" children={(props) => <SignIn {...props} refetch={retrieveUser} />} options={{headerShown: false}}/> */}
             </Stack.Navigator>}
         </NavigationContainer>
       }
