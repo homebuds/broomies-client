@@ -72,7 +72,7 @@ const Bills = ({ user, household }: IBills) => {
 
     useEffect(() => {
         const getHistory = async () => {
-            const res = await axios.get(`https://c682-2620-101-f000-704-00-12.ngrok-free.app/api/financial-transaction/list/${household}/${user}`)
+            const res = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/financial-transaction/list/${household}/${user}`)
             if (res.data) {
                 setTransactionHistory(res.data)
             }

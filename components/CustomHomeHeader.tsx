@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import NotificationsModal from './NotificationModal';
+import NotificationIcon from '../icons/notification.svg'
 import { Account } from '../types/backend';
+
 
 interface HeaderProps {
   title: string;
   user?: string;
+  household?: string;
 }
 
-const HomeHeader: React.FC<HeaderProps> = ({ title, user }) => {
+const HomeHeader: React.FC<HeaderProps> = ({ title, user, household }) => {
 
   const [data, setData] = useState<Account | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,10 +45,10 @@ const HomeHeader: React.FC<HeaderProps> = ({ title, user }) => {
       </View>
       <View>
         <TouchableOpacity onPress={() => setIsModalOpen(true)}>
-          <Image style={styles.headerImage} source={require('../icons/Notification.png')} />
+          <NotificationIcon style={styles.headerImage} />
         </TouchableOpacity>
       </View>
-      <NotificationsModal pictureUrl={data?.pictureUrl} title={"hihi"} notifications={[]} isVisible={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <NotificationsModal user={user} pictureUrl={data?.pictureUrl} title={"hihi"} isVisible={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </View>
   );
 };
@@ -55,6 +58,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center', // Vertically align text
+    alignItems: "center",
     width: '100%',
     marginTop: 26
   },
@@ -78,8 +82,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   headerImage: {
-    width: 41,
-    height: 41,
+    width: 45,
+    height: 45,
     borderRadius: 50,
     marginRight: 4
   },

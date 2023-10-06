@@ -64,44 +64,44 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <Provider store={store}>
-      {isLoading ?
-        (
-          <ActivityIndicator />
-        ) :
-        <NavigationContainer theme={MyTheme} >
-          {user ?
-            <Tab.Navigator screenOptions={{
-              headerStyle: {
-                backgroundColor: '#ffffff'
-              }, headerShown: true
-            }} tabBar={(props) => <Footer {...props} />}>
-              <Tab.Screen name="Home" options={{
-                headerTitle: () => <HomeHeader title='hi' user={user} />, headerStyle: {
-                  elevation: 0,
-                  shadowOpacity: 0,
-                  borderBottomWidth: 0,
-                  backgroundColor: '#ECF0EB'
-                }
-              }}>
-                {(props) => <Home user={user}/>}
-                </Tab.Screen>
-              <Tab.Screen name="Chores" options={{
-                headerTitle: () => <View />, headerStyle: {
-                  elevation: 0,
-                  shadowOpacity: 0,
-                  borderBottomWidth: 0,
-                  height: 55,
+        {isLoading ?
+          (
+            <ActivityIndicator />
+          ) :
+          <NavigationContainer theme={MyTheme} >
+            {user ?
+              <Tab.Navigator screenOptions={{
+                headerStyle: {
                   backgroundColor: '#ffffff'
-                }
-              }} children={(props) => <CustomChoresTab {...props} user={user} />} />
-              <Tab.Screen name="Bills" children={(props) => <Bills {...props} user={user} household={household} />} />
-              <Tab.Screen name="Log Out" children={(props) => <SignOut {...props} refetch={retrieveUser} />} />
-            </Tab.Navigator>
-            : <Stack.Navigator>
-              <Stack.Screen name="Sign In" children={(props) => <SignIn {...props} refetch={retrieveUser} />} />
-            </Stack.Navigator>}
-        </NavigationContainer>
-      }
+                }, headerShown: true
+              }} tabBar={(props) => <Footer {...props} />}>
+                <Tab.Screen name="Home" options={{
+                  headerTitle: () => <HomeHeader title='hi' user={user} household={household} />, headerStyle: {
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                    backgroundColor: '#ECF0EB'
+                  }
+                }}>
+                  {(props) => <Home user={user} />}
+                </Tab.Screen>
+                <Tab.Screen name="Chores" options={{
+                  headerTitle: () => <View />, headerStyle: {
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0,
+                    height: 55,
+                    backgroundColor: '#ffffff'
+                  }
+                }} children={(props) => <CustomChoresTab {...props} user={user} />} />
+                <Tab.Screen name="Bills" children={(props) => <Bills {...props} user={user} household={household} />} />
+                <Tab.Screen name="Log Out" children={(props) => <SignOut {...props} refetch={retrieveUser} />} />
+              </Tab.Navigator>
+              : <Stack.Navigator>
+                <Stack.Screen name="Sign In" children={(props) => <SignIn {...props} refetch={retrieveUser} />} />
+              </Stack.Navigator>}
+          </NavigationContainer>
+        }
       </Provider>
     </SafeAreaProvider >
   );
