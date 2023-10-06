@@ -4,7 +4,8 @@ import axios from 'axios';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import { Image } from 'react-native-elements';
 import { AssignedChore } from '../types/backend';
-import InView from 'react-native-component-inview'
+
+import InView from 'react-native-component-inview';
 
 
 interface INotificationCard {
@@ -75,7 +76,6 @@ const styles = StyleSheet.create({
     container: {
         height: 70,
         width: 325,
-        // backgroundColor: 'pink',
         display: 'flex',
         alignContent: 'center',
         alignItems: 'center',

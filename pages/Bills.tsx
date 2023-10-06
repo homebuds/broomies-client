@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Alert, Text, View, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { Input, Button } from "react-native-elements";
 import ArrowDownIcon from "../icons/arrowdown.svg";
 import axios from "axios";
@@ -81,7 +81,12 @@ const Bills = ({ user, household }: IBills) => {
         const getHistory = async () => {
             const res = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/financial-transaction/list/${household}/${user}`)
             if (res.data) {
-                setTransactionHistory(res.data)
+                const transformedData = res.data.map((item : any) => {
+                    return {...item, createdAt: new Date(item["createdAt"])}
+                }) 
+                transformedData.sort((a: any, b: any) => b.createdAt - a.createdAt )
+                setTransactionHistory(transformedData)
+                // console.log(res.data)
             }
         }
         getHistory();
@@ -199,16 +204,21 @@ const Bills = ({ user, household }: IBills) => {
                 </View>
             )}
 
-            {transactionHistory.map((transaction: Transaction, index) => {
-                return (
-                    <TransactionCard
-                        key={index}
-                        owed={transaction.owed}
-                        user={transaction.accountId}
-                        description={transaction.name}
+            <FlatList
+                data={transactionHistory}
+                keyExtractor={({ id }) => id}
+                
+                ItemSeparatorComponent={() => <View style={{ width: 25 }} />}
+                style={{ overflow: "scroll", width: "100%", maxHeight: 360, marginTop: 15 }}
+                renderItem={({ item, index }) => (
+                    <TransactionCard 
+                        key={index} 
+                        owed={item['owed']} 
+                        user={item['accountId']} 
+                        description={item['name']} 
+                        createdAt={new Date(item['createdAt'])}
                     />
-                );
-            })}
+                )} />
         </View>
     );
 };
@@ -216,6 +226,7 @@ const Bills = ({ user, household }: IBills) => {
 const styles = StyleSheet.create({
     container: {
         padding: 30,
+        marginTop: 40
     },
     sumContainer: {
         borderRadius: 20,

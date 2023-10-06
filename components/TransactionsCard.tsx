@@ -12,20 +12,20 @@ interface ITransactionCard {
     user: string
     description: string
     owed: number
+    createdAt: Date
 }
 
 const TransactionCard = (props: ITransactionCard) => {
 
-    const { user, description, owed } = props
+    const { user, description, owed, createdAt } = props
 
     const [data, setData] = useState<Account>()
     const [loading, setLoading] = useState(true);
 
     const getCurrentDate = () => {
-        const currentDate = new Date();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 because months are zero-based
-        const day = String(currentDate.getDate()).padStart(2, '0');
-        const year = currentDate.getFullYear();
+        const month = String(createdAt.getMonth() + 1).padStart(2, '0'); // Adding 1 because months are zero-based
+        const day = String(createdAt.getDate()).padStart(2, '0');
+        const year = createdAt.getFullYear();
 
         const formattedDate = `${month}/${day}/${year}`;
 

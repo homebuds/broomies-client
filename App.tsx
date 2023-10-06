@@ -72,7 +72,7 @@ const App = () => {
             {user ?
               <Tab.Navigator screenOptions={{
                 headerStyle: {
-                  backgroundColor: '#ffffff'
+                  backgroundColor: '#FFFCF4'
                 }, headerShown: true
               }} tabBar={(props) => <Footer {...props} />}>
                 <Tab.Screen name="Home" options={{
@@ -80,7 +80,7 @@ const App = () => {
                     elevation: 0,
                     shadowOpacity: 0,
                     borderBottomWidth: 0,
-                    backgroundColor: '#ECF0EB'
+                    backgroundColor: '#FFFCF4'
                   }
                 }}>
                   {(props) => <Home user={user} />}
@@ -91,10 +91,10 @@ const App = () => {
                     shadowOpacity: 0,
                     borderBottomWidth: 0,
                     height: 55,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#FFFCF4'
                   }
                 }} children={(props) => <CustomChoresTab {...props} user={user} />} />
-                <Tab.Screen name="Bills" children={(props) => <Bills {...props} user={user} household={household} />} />
+                <Tab.Screen name="Bills" children={(props) => <Bills {...props} user={user} household={household} />} options={{headerShown: false}} />
                 <Tab.Screen name="Log Out" children={(props) => <SignOut {...props} refetch={retrieveUser} />} />
               </Tab.Navigator>
               : <Stack.Navigator>
